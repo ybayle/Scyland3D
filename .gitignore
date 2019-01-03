@@ -1,4 +1,9 @@
+# Python and pypi specific
 __pycache__
+Scyland3D.egg-info/
+dist/
+
+# Scyland3D
 landmarks.csv
 landmarks_reversed.csv
 landmarks_reordered.csv
