@@ -4,8 +4,8 @@
 Processing schemes to mirror and reorder these points are provided to address further symmetry issues.
 
 By:
-- Fidji Berio ([GitHub](https://github.com/fberio)) from [ISEM](http://www.isem.univ-montp2.fr/en/) and [IGFL](http://igfl.ens-lyon.fr/igfl/annuaire/berio-fidji)),
-- Yann Bayle ([Website](http://yannbayle.fr/english/index.php), [GitHub](https://github.com/ybayle)) from [LaBRI](http://www.labri.fr/), [Univ. Bordeaux](https://www.u-bordeaux.fr/), [CNRS](http://www.cnrs.fr/), and [SCRIME](https://scrime.u-bordeaux.fr/))
+- Fidji Berio ([GitHub](https://github.com/fberio)) from [ISEM](http://www.isem.univ-montp2.fr/en/) and [IGFL](http://igfl.ens-lyon.fr/igfl/annuaire/berio-fidji),
+- Yann Bayle ([Website](http://yannbayle.fr/english/index.php), [GitHub](https://github.com/ybayle)) from [LaBRI](http://www.labri.fr/), [Univ. Bordeaux](https://www.u-bordeaux.fr/), [CNRS](http://www.cnrs.fr/), and [SCRIME](https://scrime.u-bordeaux.fr/).
 
 ## Installation
 
@@ -35,26 +35,26 @@ We provide 7 landmark and 31 semilandmark coordinates for 2 upper teeth and for 
 
 The function `pts2csv()` is the core of **Scyland3D** and takes the following arguments:
 
-- indir (required)
+- *indir* (required)
     - A string containing the input directory where the files are stored. You can use any number of sub-directories. Folder and file names can specify the feature modalities separated by `_` (e.g. speciesA_ageX_sex1.pts).
     - Example: `Scyland3D.pts2csv("example/")`
-- mirror_factor (optional)
+- *mirror_factor* (optional)
     - A string containing the keyword for items to be mirrored in the 3D space.
     - Default: None
     - Example: `Scyland3D.pts2csv("example/", mirror_factor="upper")` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items.
-- order (optional)
+- *order* (optional)
     - A list of integer indicating the new order to apply to the landmarks.
     - Default: None
     - Example: `Scyland3D.pts2csv("example/", order_factor="upper", order=[36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37])`
-- order_factor (optional)
+- *order_factor* (optional)
     - A string containing the keyword for items that need their landmarks and semilandmarks to be reordered.
     - Default: None
     - Example: `Scyland3D.pts2csv("example/", order_factor="upper", order=[36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37])`
-- feature_names (optional)
+- *feature_names* (optional)
     - A list of string containing the feature names.
     - Default: None
     - Example: `Scyland3D.pts2csv("example/", feature_names=["identifier", "species", "location", "length", "sex", "stage", "jaw", "position", "generation"])`
-- verbose (optional)
+- *verbose* (optional)
     - A boolean indicating if information should be printed on the console by the process.
     - Default: True
     - Example: `Scyland3D.pts2csv("example/", verbose=False)` for removing the display of information to the console.
@@ -74,8 +74,8 @@ Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 ```
 @article{Berio2019,
     author  = {Berio, Fidji and Bayle, Yann},
-    title   = {Scyland3D: Processing 3D landmarks},
-    journal = {The Journal of Open Source Software},
+    title   = {{Scyland3D: Processing 3D landmarks}},
+    journal = {{The Journal of Open Source Software}},
     page    = {1--3},
     note    = {Review pending}
 }
