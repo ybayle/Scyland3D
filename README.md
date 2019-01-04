@@ -59,7 +59,7 @@ The function `pts2csv()` is the core of **Scyland3D** and takes the following ar
     - Default: True
     - Example: `Scyland3D.pts2csv("example/", verbose=False)` for removing the display of information to the console.
 
-More information can be found on the [related article](TODOLinkToJOSS).
+More information can be found on the [related article](https://github.com/openjournals/joss-papers/blob/joss.01153/joss.01153/10.21105.joss.01153.pdf).
 
 ## How To Contribute
 
@@ -76,7 +76,10 @@ Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
     author  = {Berio, Fidji and Bayle, Yann},
     title   = {{Scyland3D: Processing 3D landmarks}},
     journal = {{The Journal of Open Source Software}},
-    page    = {1--3},
+    page    = {1153--1155},
+    volume  = {4},
+    issue   = {33},
+    doi     = {10.21105/joss.01153},
     note    = {Review pending}
 }
 ```
