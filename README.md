@@ -68,7 +68,7 @@ Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## License
 
-**Scyland3D** is licensed under the GNU Affero General Public License v3.0 as described in the [license file](LICENSE).
+**Scyland3D** is licensed under the MIT License as described in the [license file](LICENSE).
 **Scyland3D** was mainly created for research purposes and thus can be used freely for research and academic use with the following citation:
 
 ```
