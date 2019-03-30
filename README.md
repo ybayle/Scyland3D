@@ -17,6 +17,7 @@ Dependencies:
 
 - [Python](https://www.python.org/) 2 or 3. **Scyland3D** has been tested with Python 2.7.16 and 3.6.3 and **should** work with older versions of Python.
 - [Numpy](https://www.numpy.org/) >= 1.13.3. **Scyland3D** has been tested with Numpy 1.13.3 and 1.16.2 and **should** work with older versions of Numpy.
+
 If you encounter an error with other versions, please [submit an issue](https://github.com/ybayle/Scyland3D/issues/new).
 
 ## Use-case example
