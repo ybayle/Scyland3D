@@ -4,60 +4,27 @@
 # E-mails   fidji.berio@ens-lyon.fr and bayle.yann@live.fr
 # License   MIT
 # Created   15/02/2018
-# Updated   03/01/2019
-# Version   1.0.0
+# Updated   30/03/2019
+# Version   1.0.1
 #
 
 import os
+import csv
 import numpy as np
 
 
-def export2csv(data, input_filename, output_filename):
+def export2csv(data, nb_landmark, indir, modif=""):
     """export2csv
-    Export to a CSV named output_filename the data with an additional column provided by input_filename
+    Export data to a CSV named indir + "../landmarks" + modif + ".csv"
     """
-    assert input_filename
-    assert os.path.exists(output_filename) and os.path.isfile(output_filename)
-    str2write_xyz = input_filename + ","
-    for i in data:
-        for j in i:
-            str2write_xyz += str(j) + ","
-    filen = input_filename.split(".")[0]
-    str2write_xyz += filen[filen.find(os.sep) + 1:].replace("_", ",").replace("-", ".").replace("/", ",").replace("\\", ",") + "\n"
-    with open(output_filename, "a") as filep:
-        filep.write(str2write_xyz)
-
-
-def write_header(indir, nb_landmark, nb_feature, mirror_factor, order_factor, feature_names=None):
-    """write_header
-    Create an empty file with a header
-    """
-    assert nb_landmark > 0
-    assert os.path.exists(indir) and os.path.isdir(indir), indir + " not found."
-    if indir[-1] != os.sep:
-        indir += os.sep
-    axis = ["x", "y", "z"]
-    header = "ID"
+    fieldnames = ["ID"]
     for numb in range(1, nb_landmark + 1):
-        for axe in axis:
-            header += "," + axe + str(numb)
-    if feature_names is not None:
-        assert len(feature_names) == nb_feature
-        header += "," + ",".join(feature_names)
-    else:
-        for numb in range(1, nb_feature + 1):
-            header += ",Feature" + str(numb)
-    header += "\n"
-    with open(indir + "../landmarks.csv", "w") as filep:
-        filep.write(header)
-    modif = ""
-    if mirror_factor is not None:
-        modif += "_reversed"
-    if order_factor is not None:
-        modif += "_reordered"
-    if mirror_factor is not None or order_factor is not None:
-        with open(indir + "../landmarks" + modif + ".csv", "w") as filep:
-            filep.write(header)
+        [fieldnames.append(axe + str(numb)) for axe in ["x", "y", "z"]]
+    nb_feature = len(data[0]) - nb_landmark * 3 - 1
+    [fieldnames.append("Feature" + str(numb)) for numb in range(1, nb_feature + 1)]
+    with open(indir + "../landmarks" + modif + ".csv", "w") as out_file:
+        csv.DictWriter(out_file, fieldnames=fieldnames).writeheader()
+        csv.writer(out_file).writerows(data)
 
 
 def list_pts(indir):
@@ -135,7 +102,7 @@ def reverse_z(data):
     return data_mirror
 
 
-def pts2csv(indir, mirror_factor=None, order=None, order_factor=None, feature_names=None, verbose=True):
+def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None, verbose=True):
     """pts2csv
     Convert .pts files from indir to a single .csv file
     """
@@ -147,6 +114,7 @@ def pts2csv(indir, mirror_factor=None, order=None, order_factor=None, feature_na
     nb_feature = 0
     nb_landmark = 0
     list_pts_files = list_pts(indir)
+    data2write = []
     for index, filen in enumerate(list_pts_files):
         if verbose:
             print(str(index + 1) + "/" + str(len(list_pts_files)) + " " + filen)
@@ -163,7 +131,6 @@ def pts2csv(indir, mirror_factor=None, order=None, order_factor=None, feature_na
         data = remove_duplicates(data)
         if nb_landmark == 0:
             nb_landmark = len(data)
-            write_header(indir, nb_landmark, nb_feature, mirror_factor, order_factor, feature_names)
         assert len(data) == nb_landmark, "Some landmarks may not be correctly superimposed for " + filen + " because there are " + str(len(data)) + " landmarks detected instead of " + str(nb_landmark)
         modif = ""
         if mirror_factor is not None and mirror_factor in filen:
@@ -174,4 +141,15 @@ def pts2csv(indir, mirror_factor=None, order=None, order_factor=None, feature_na
             data = data[order]
             data = data.tolist()
             modif += "_reordered"
-        export2csv(data, filen, indir + "../landmarks" + modif + ".csv")
+        # add new row to data
+        row = [filen]
+        data = np.array(data)
+        [row.append(val) for val in data.reshape(data.shape[0] * data.shape[1])]
+        filen = filen.split(".")[0]
+        [row.append(feature) for feature in filen[filen.find(os.sep) + 1:].replace("_", ",").replace("-", ".").replace("/", ",").replace("\\", ",").split(",")]
+        data2write.append(row)
+    export2csv(data2write, nb_landmark, indir, modif)
+
+
+if __name__ == '__main__':
+    pts2csv()
