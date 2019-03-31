@@ -178,7 +178,7 @@ def main(argv):
             order = arg
         elif opt in ("-f", "--order_factor"):
             order_factor = arg
-        elif opt in ("-o", "--verbose"):
+        elif opt in ("-v", "--verbose"):
             verbose = [True if arg == "True" or arg == "true" or arg == "t" or arg == "T" else False]
     pts2csv(indir=indir, mirror_factor=mirror_factor, order=order, order_factor=order_factor, verbose=verbose)
 
