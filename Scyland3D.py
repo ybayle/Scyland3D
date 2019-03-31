@@ -5,11 +5,13 @@
 # License   MIT
 # Created   15/02/2018
 # Updated   30/03/2019
-# Version   1.0.1
+# Version   1.0.2
 #
 
 import os
 import csv
+import sys
+import getopt
 import numpy as np
 
 
@@ -151,5 +153,35 @@ def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None,
     export2csv(data2write, nb_landmark, indir, modif)
 
 
+def usage():
+    sys.exit("Scyland3D.py -i <input_directory> [-m <mirror_factor>] [-o <order> -f <order_factor>] [-v <verbosity_level>]")
+
+
+def main(argv):
+    indir = "example/"
+    mirror_factor = None
+    order = None
+    order_factor = None
+    verbose = True
+    try:
+        opts, args = getopt.getopt(argv,"hi:m:o:f:v:", ["indir=", "mirror_factor=", "order=", "order_factor=" "verbose="])
+    except getopt.GetoptError:
+        usage()
+    for opt, arg in opts:
+        if opt == "-h":
+            usage()
+        elif opt in ("-i", "--indir"):
+            indir = arg
+        elif opt in ("-m", "--mirror_factor"):
+            mirror_factor = arg
+        elif opt in ("-o", "--order"):
+            order = arg
+        elif opt in ("-f", "--order_factor"):
+            order_factor = arg
+        elif opt in ("-o", "--verbose"):
+            verbose = [True if arg == "True" or arg == "true" or arg == "t" or arg == "T" else False]
+    pts2csv(indir=indir, mirror_factor=mirror_factor, order=order, order_factor=order_factor, verbose=verbose)
+
+
 if __name__ == '__main__':
-    pts2csv()
+    main(sys.argv[1:])
