@@ -40,10 +40,6 @@ The function `pts2csv()` is the core of **Scyland3D** and takes the following ar
 - *indir* (required)
     - A string containing the input directory where the files are stored. You can use any number of sub-directories. Folder and file names can specify the feature modalities separated by `_` (e.g. speciesA_ageX_sex1.pts).
     - Example: `Scyland3D.pts2csv("example/")`
-- *mirror_factor* (optional)
-    - A string containing the keyword for items to be mirrored in the 3D space.
-    - Default: None
-    - Example: `Scyland3D.pts2csv("example/", mirror_factor="upper")` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items.
 - *order* (optional)
     - A list of integer indicating the new order to apply to the landmarks.
     - Default: None
@@ -60,6 +56,12 @@ The function `pts2csv()` is the core of **Scyland3D** and takes the following ar
     - A boolean indicating if information should be printed on the console by the process.
     - Default: True
     - Example: `Scyland3D.pts2csv("example/", verbose=False)` for removing the display of information to the console.
+- *mirror_factor* (optional)
+    - A string containing the keyword for items to be mirrored in the 3D space.
+    - Default: None
+    - Example: `Scyland3D.pts2csv("example/", mirror_factor="upper")` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items as depicted in the figure below:
+    
+![Landmarks on a tooth](paper/figure1.png)
 
 More information can be found on the [related article](https://github.com/openjournals/joss-papers/blob/joss.01153/joss.01153/10.21105.joss.01153.pdf).
 
