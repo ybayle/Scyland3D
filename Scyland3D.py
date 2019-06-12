@@ -4,8 +4,8 @@
 # E-mails   fidji.berio@ens-lyon.fr and bayle.yann@live.fr
 # License   MIT
 # Created   15/02/2018
-# Updated   30/03/2019
-# Version   1.0.2
+# Updated   12/06/2019
+# Version   1.0.3
 #
 
 import os
@@ -15,21 +15,25 @@ import getopt
 import numpy as np
 
 
-def export2csv(data, nb_landmark, indir, modif=""):
+def _export2csv(data, nb_landmark, indir, modif=""):
     """export2csv
     Export data to a CSV named indir + "../landmarks" + modif + ".csv"
     """
+    # Generate the header of the csv
     fieldnames = ["ID"]
     for numb in range(1, nb_landmark + 1):
-        [fieldnames.append(axe + str(numb)) for axe in ["x", "y", "z"]]
+        for axe in ["x", "y", "z"]:
+            fieldnames.append(axe + str(numb))
     nb_feature = len(data[0]) - nb_landmark * 3 - 1
-    [fieldnames.append("Feature" + str(numb)) for numb in range(1, nb_feature + 1)]
+    for numb in range(1, nb_feature + 1):
+        fieldnames.append("Feature" + str(numb))
+    # Export the header and the data  
     with open(indir + "../landmarks" + modif + ".csv", "w") as out_file:
         csv.DictWriter(out_file, fieldnames=fieldnames).writeheader()
         csv.writer(out_file).writerows(data)
 
 
-def list_pts(indir):
+def _list_pts(indir):
     """list_pts
     Recursively lists all .pts file from indir
     """
@@ -40,7 +44,7 @@ def list_pts(indir):
     return filenames
 
 
-def remove_duplicates(data):
+def _remove_duplicates(data):
     """remove_duplicates
     Remove the duplicates landmarks and semi-landmarks
     """
@@ -70,7 +74,7 @@ def remove_duplicates(data):
     return new_data
 
 
-def reverse_z(data):
+def _reverse_z(data):
     """reverse_z
     good https://www.youtube.com/watch?v=86lwcXeZoiA
     wrong https://stackoverflow.com/questions/8954326/how-to-calculate-the-mirror-point-along-a-line#8954454
@@ -115,49 +119,65 @@ def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None,
 
     nb_feature = 0
     nb_landmark = 0
-    list_pts_files = list_pts(indir)
+    list_pts_files = _list_pts(indir)
     data2write = []
+    # For each .pts file
     for index, filen in enumerate(list_pts_files):
         if verbose:
             print(str(index + 1) + "/" + str(len(list_pts_files)) + " " + filen)
+        # Count the number of feature in that file
         nb_detected_feature = filen[filen.find(os.sep) + 1:].count("_") + filen.count(os.sep)
         if nb_feature == 0:
+            # Use the number of features from the first .pts file as reference
             nb_feature = nb_detected_feature
         else:
+            # Check that the number of feature between all .pts files are consistent
             assert nb_feature == nb_detected_feature, "The name of the file or of the directory does not seems to be consistent because for " + filen + " because there are " + str(nb_detected_feature) + " detected features while " + str(nb_feature) + " were expected."
         data = []
+        # Gather semi-landmarks (S) and landmarks (C)
         with open(filen, "r") as filep:
             for line in filep:
                 if line[0] in ["S", "C"]:
                     data.append(",".join(line[:-1].split("  ")[1:]))
-        data = remove_duplicates(data)
+        # Remove duplicates landmarks generated that are generally present in the .pts files
+        data = _remove_duplicates(data)
         if nb_landmark == 0:
             nb_landmark = len(data)
         assert len(data) == nb_landmark, "Some landmarks may not be correctly superimposed for " + filen + " because there are " + str(len(data)) + " landmarks detected instead of " + str(nb_landmark)
         modif = ""
+        # Apply a z-axis mirror to the landmarks to study left-right differences in the given species 
         if mirror_factor is not None and mirror_factor in filen:
-            data = reverse_z(data)
+            data = _reverse_z(data)
             modif += "_reversed"
+        # Reorder the landmarks to avoir bias during landmarks set up by humans
         if order_factor is not None and order_factor in filen:
             data = np.array(data)
             data = data[order]
             data = data.tolist()
             modif += "_reordered"
-        # add new row to data
+        # Add new row to data
         row = [filen]
         data = np.array(data)
-        [row.append(val) for val in data.reshape(data.shape[0] * data.shape[1])]
+        for val in data.reshape(data.shape[0] * data.shape[1]):
+            row.append(val) 
         filen = filen.split(".")[0]
-        [row.append(feature) for feature in filen[filen.find(os.sep) + 1:].replace("_", ",").replace("-", ".").replace("/", ",").replace("\\", ",").split(",")]
+        for feature in filen[filen.find(os.sep) + 1:].replace("_", ",").replace("-", ".").replace("/", ",").replace("\\", ",").split(","):
+            row.append(feature) 
         data2write.append(row)
-    export2csv(data2write, nb_landmark, indir, modif)
+    _export2csv(data2write, nb_landmark, indir, modif)
 
 
-def usage():
+def _usage():
+    """usage
+    Print usage to the user when using option -h or when invalid options are provided
+    """
     sys.exit("Scyland3D.py -i <input_directory> [-m <mirror_factor>] [-o <order> -f <order_factor>] [-v <verbosity_level>]")
 
 
 def main(argv):
+    """main entry point
+    Parse arguments and call the function to convert multiple .pts files to a single csv file
+    """
     indir = "example/"
     mirror_factor = None
     order = None
@@ -166,10 +186,10 @@ def main(argv):
     try:
         opts, args = getopt.getopt(argv,"hi:m:o:f:v:", ["indir=", "mirror_factor=", "order=", "order_factor=" "verbose="])
     except getopt.GetoptError:
-        usage()
+        _usage()
     for opt, arg in opts:
         if opt == "-h":
-            usage()
+            _usage()
         elif opt in ("-i", "--indir"):
             indir = arg
         elif opt in ("-m", "--mirror_factor"):

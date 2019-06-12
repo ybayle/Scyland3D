@@ -27,6 +27,9 @@ bibliography: paper.bib
 
 ``Scyland3D`` is a Python tool for converting 3D raw landmark and semilandmark coordinates to a usable format for geometric morphometric analyses.
 Processing schemes to mirror and reorder these points are provided to address further symmetry issues.
+This is useful when working on left-right differences in a given species. 
+This tool is designed to pre-process the raw extracted landmarks and to generate a database-like CSV file for statistical analyses.
+The main targeted audience are biologist looking for an easy and quick parser for raw landmarks.
 
 # Background
 
