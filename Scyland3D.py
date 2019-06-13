@@ -17,7 +17,13 @@ import numpy as np
 
 def _export2csv(data, nb_landmark, indir, modif=""):
     """export2csv
-    Export data to a CSV named indir + "../landmarks" + modif + ".csv"
+    Export data to a CSV named indir + "../landmarks" + modif + ".csv".
+
+    Args:
+        data (array): The landmarks to export.
+        nb_landmark (int): The number of landmarks.
+        indir (str): The name of the directory where the output files will be stored.
+        modif (str): The name of the modification applied to the data.
     """
     # Generate the header of the csv
     fieldnames = ["ID"]
@@ -35,7 +41,13 @@ def _export2csv(data, nb_landmark, indir, modif=""):
 
 def _list_pts(indir):
     """list_pts
-    Recursively lists all .pts file from indir
+    Recursively lists all .pts file from indir.
+
+    Args:
+        indir (str): The name of the directory where the .pts files are stored.
+
+    Returns:
+        An array of .pts file names to process. 
     """
     assert os.path.exists(indir) and os.path.isdir(indir), indir + " not found."
     filenames = [os.path.join(dp, f) for dp, dn, fn in os.walk(os.path.expanduser(indir)) for f in fn]
@@ -46,7 +58,13 @@ def _list_pts(indir):
 
 def _remove_duplicates(data):
     """remove_duplicates
-    Remove the duplicates landmarks and semi-landmarks
+    Remove the duplicates landmarks and semi-landmarks.
+
+    Args:
+        data (array): Contains the landmarks.
+
+    Returns:
+        An array of landmarks where duplicates were removed.
     """
     # Remove easy duplicates where the string are an exact match
     data = sorted(set(data), key=data.index)
@@ -78,6 +96,12 @@ def _reverse_z(data):
     """reverse_z
     good https://www.youtube.com/watch?v=86lwcXeZoiA
     wrong https://stackoverflow.com/questions/8954326/how-to-calculate-the-mirror-point-along-a-line#8954454
+
+    Args:
+        data (array): Contains the landmarks.
+
+    Returns:
+        An array of landmarks inverted along the z-axis.
     """
     matrix_xy = []
     matrix_z = []
@@ -111,6 +135,13 @@ def _reverse_z(data):
 def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None, verbose=True):
     """pts2csv
     Convert .pts files from indir to a single .csv file
+
+    Args:
+        indir (str): The name of the directory where the output files will be stored.
+        mirror_factor (str): The name of the factor to use for mirroring the landmarks on the z-axis.
+        order (array): An array of int indicating how to reorder the landmarks.
+        order_factor (str): The name of the factor to use for reordering the landmarks.
+        verbose (bool): Whether to output details during the process.
     """
     assert os.path.exists(indir) and os.path.isdir(indir), indir + " not found."
     assert (order is None and order_factor is None) or (order is not None and order_factor is not None), "Must supply order and order_factor."
@@ -177,6 +208,9 @@ def _usage():
 def main(argv):
     """main entry point
     Parse arguments and call the function to convert multiple .pts files to a single csv file
+
+    Args:
+        argv (array): The list of arguments.
     """
     indir = "example/"
     mirror_factor = None
