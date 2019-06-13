@@ -4,7 +4,7 @@
 # E-mails   fidji.berio@ens-lyon.fr and bayle.yann@live.fr
 # License   MIT
 # Created   15/02/2018
-# Updated   12/06/2019
+# Updated   13/06/2019
 # Version   1.0.3
 #
 
