@@ -68,7 +68,7 @@ def _remove_duplicates(data):
     """
     # Remove easy duplicates where the string are an exact match
     data = sorted(set(data), key=data.index)
-    # Remove duplicates up to epsilon because some (semi-)landmarks are exported with different float precision
+    # Remove duplicates because some landmarks and semilandmarks are sometimes exported twice.
     coord = []
     for item in data:
         tmp = []
@@ -94,8 +94,10 @@ def _remove_duplicates(data):
 
 def _reverse_z(data):
     """reverse_z
-    good https://www.youtube.com/watch?v=86lwcXeZoiA
-    wrong https://stackoverflow.com/questions/8954326/how-to-calculate-the-mirror-point-along-a-line#8954454
+    Find the relative z-axis for a given set of point by computing a plane that minimizes the difference between it and the given points.
+    Then reverts the set of points relatively to this new plane.
+    Inspired from https://www.youtube.com/watch?v=86lwcXeZoiA
+    The suggestion from https://stackoverflow.com/questions/8954326/how-to-calculate-the-mirror-point-along-a-line#8954454 is not applicable here as it is not valid in 3D and does not take into account relative axes. 
 
     Args:
         data (array): Contains the landmarks.

@@ -1,6 +1,6 @@
 # Scyland3D: Processing 3D landmarks
 
-**Scyland3D** is a Python tool for converting 3D raw landmark and semilandmark coordinates to a usable format for geometric morphometric analyses.
+``Scyland3D`` is a Python tool for converting 3D raw landmark and semilandmark coordinates exported from landmark acquisition softwares to a csv format best suited for geometric morphometric analyses.
 Processing schemes to mirror and reorder these points are provided to address further symmetry issues.
 
 By:
@@ -22,7 +22,7 @@ If you encounter an error with other versions, please [submit an issue](https://
 
 ## Use-case example
 
-To quickly process landmarks files, you can give **Scyland3D** the path to the folder containing the `.pts` files, as shown in the example files provided:
+To quickly process landmarks files, you can give **Scyland3D** the path to the folder containing the `.pts` files (format define on page 37 in http://www.idav.ucdavis.edu/research/projects/EvoMorph/supplement/LandmarkDoc_v3_b6.pdf), as shown in the example files provided:
 
 ```
 import Scyland3D
@@ -32,6 +32,7 @@ Scyland3D.pts2csv("example/")
 This will create a file named `landmarks.csv` that you can use for statistical analyses in any language/software you want.
 The example files provided come from a subset of our dataset for studying teeth of the small-spotted catshark *Scyliorhinus canicula*.
 We provide 7 landmark and 31 semilandmark coordinates for 2 upper teeth and for 3 lower ones, stored in two folders that describe the specimens they belong to.
+A landmark is a point set up by hand as opposed to a semilandmark that is interpolated by the computer between two landmarks by following the curvature of the studied form.
 
 ## API documentation
 
