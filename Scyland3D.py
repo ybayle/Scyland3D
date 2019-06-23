@@ -77,7 +77,7 @@ def _remove_duplicates(data):
         for i in range(len(coord) - 1):
             for j in range(len(coord) - i - 1):
                 if coord[i][k] == coord[i + j + 1][k]:
-                    # If two coordinates are the same, then the rows are duplicates and will be removed
+                    # If two landmarks share at least two similar coordinates, then the rows are considered as duplicates and the second one will be removed.
                     tmp = [0, 1, 2]
                     tmp.remove(k)
                     if (coord[i][tmp[0]] == coord[i + j + 1][tmp[0]]) or (coord[i][tmp[1]] == coord[i + j + 1][tmp[1]]):
@@ -92,7 +92,7 @@ def _remove_duplicates(data):
 def _reverse_z(data):
     """reverse_z
     Find the relative z-axis for a given set of point by computing a plane that minimizes the difference between it and the given points.
-    Then reverts the set of points relatively to this new plane, so no user specific plane has to be supplied.
+    Then reverses the set of points relatively to this new plane, so no user specific plane has to be supplied.
     Inspired from https://www.youtube.com/watch?v=86lwcXeZoiA
     The suggestion from https://stackoverflow.com/questions/8954326/how-to-calculate-the-mirror-point-along-a-line#8954454 is not applicable here as it is not valid in 3D and does not take into account relative axes. 
 

@@ -1,6 +1,6 @@
 # Scyland3D: Processing 3D landmarks
 
-``Scyland3D`` is a Python tool for converting 3D raw landmark and semilandmark coordinates exported from landmark acquisition softwares to a csv format best suited for geometric morphometric analyses.
+``Scyland3D`` is a Python tool for converting 3D raw landmark and semilandmark coordinates exported from landmark acquisition software (e.g. [Landmark Editor 3.6 from IDAV, UC Davis](http://www.idav.ucdavis.edu/research/EvoMorph)) to a csv format best suited for geometric morphometric analyses.
 Processing schemes to mirror and reorder these points are provided to address further symmetry issues.
 
 By:
@@ -22,7 +22,7 @@ If you encounter an error with other versions, please [submit an issue](https://
 
 ## Use-case example
 
-To quickly process landmarks files, you can give **Scyland3D** the path to the folder containing the `.pts` files (format define on page 37 in http://www.idav.ucdavis.edu/research/projects/EvoMorph/supplement/LandmarkDoc_v3_b6.pdf), as shown in the example files provided:
+To quickly process landmarks files, you can give **Scyland3D** the path to the folder containing the `.pts` files (format defined on page 37 in http://www.idav.ucdavis.edu/research/projects/EvoMorph/supplement/LandmarkDoc_v3_b6.pdf), as shown in the example files provided:
 
 ```
 import Scyland3D
@@ -73,8 +73,7 @@ Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## License
 
-**Scyland3D** is licensed under the MIT License as described in the [license file](LICENSE).
-**Scyland3D** was mainly created for research purposes and thus can be used freely for research and academic use with the following citation:
+**Scyland3D** is licensed under the MIT License as described in the [license file](LICENSE). Please use the following citation:
 
 ```
 @article{Berio2019,
