@@ -4,8 +4,8 @@
 # E-mails   fidji.berio@ens-lyon.fr and bayle.yann@live.fr
 # License   MIT
 # Created   15/02/2018
-# Updated   13/06/2019
-# Version   1.0.3
+# Updated   24/06/2019
+# Version   1.0.4
 #
 
 import os
@@ -15,7 +15,7 @@ import getopt
 import numpy as np
 
 
-def _export2csv(data, nb_landmark, indir, modif=""):
+def _export2csv(data, nb_landmark, indir, feature_names=None, modif=""):
     """export2csv
     Export data to a CSV named indir + "../landmarks" + modif + ".csv".
 
@@ -23,16 +23,25 @@ def _export2csv(data, nb_landmark, indir, modif=""):
         data (array): The landmarks to export.
         nb_landmark (int): The number of landmarks.
         indir (str): The name of the directory where the output files will be stored.
-        modif (str): The name of the modification applied to the data.
+        feature_names (str or array of str): String describing each feature names separated with a comma or array of string (e.g. "age,sex,size" if supplied from the command line or ["age", "sex", "size"] if supplied in python script).
+        modif (str): The name of the modification applied to the data (e.g. none, reversed, and/or reordered).
     """
     # Generate the header of the csv
     fieldnames = ["ID"]
+    assert nb_landmark > 0, "The number of landmarks must be positive."
     for numb in range(1, nb_landmark + 1):
         for axe in ["x", "y", "z"]:
             fieldnames.append(axe + str(numb))
     nb_feature = len(data[0]) - nb_landmark * 3 - 1
-    for numb in range(1, nb_feature + 1):
-        fieldnames.append("Feature" + str(numb))
+    if feature_names is not None:
+        if isinstance(feature_names, str):
+            feature_names = feature_names.split(",")
+        assert nb_feature == len(feature_names), "The number of feature names provided (" + str(len(feature_names)) + ") does not match the number of features detected in the files " + str(nb_feature) + "."
+        for feature_name in feature_names:
+            fieldnames.append(feature_name)
+    else:
+        for numb in range(1, nb_feature + 1):
+            fieldnames.append("Feature" + str(numb))
     # Export the header and the data  
     with open(indir + "../landmarks" + modif + ".csv", "w") as out_file:
         csv.DictWriter(out_file, fieldnames=fieldnames).writeheader()
@@ -131,19 +140,19 @@ def _reverse_z(data):
     return data_mirror
 
 
-def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None, verbose=True):
+def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None, feature_names=None, verbose=True):
     """pts2csv
     Convert .pts files from indir to a single .csv file
 
     Args:
         indir (str): The name of the directory where the output files will be stored.
         mirror_factor (str): The name of the factor to use for mirroring the landmarks on the z-axis.
-        order (array): An array of int indicating how to reorder the landmarks.
+        order (str or array of int): A string (if supplied by the command line) or an array of int (if called from another python script) indicating how to reorder the landmarks (e.g. "1,3,2" if supplied from the command line or [1, 3, 2] if supplied by another python script).
         order_factor (str): The name of the factor to use for reordering the landmarks.
         verbose (bool): Whether to output details during the process.
     """
     assert os.path.exists(indir) and os.path.isdir(indir), indir + " not found."
-    assert (order is None and order_factor is None) or (order is not None and order_factor is not None), "Must supply order and order_factor."
+    assert (order is None and order_factor is None) or (order is not None and order_factor is not None and isinstance(order_factor, str)), "Must supply order and order_factor."
     if indir[-1] != os.sep:
         indir += os.sep
 
@@ -151,6 +160,7 @@ def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None,
     nb_landmark = 0
     list_pts_files = _list_pts(indir)
     data2write = []
+    order_factor_found_at_least_in_one_file = False
     # For each .pts file
     for index, filen in enumerate(list_pts_files):
         if verbose:
@@ -176,11 +186,14 @@ def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None,
         assert len(data) == nb_landmark, "Some landmarks may not be correctly superimposed for " + filen + " because there are " + str(len(data)) + " landmarks detected instead of " + str(nb_landmark)
         modif = ""
         # Apply a z-axis mirror to the landmarks to study left-right differences in the given species 
-        if mirror_factor is not None and mirror_factor in filen:
+        if mirror_factor is not None and isinstance(mirror_factor, str) and mirror_factor in filen:
             data = _reverse_z(data)
             modif += "_reversed"
-        # Reorder the landmarks to avoir bias during landmarks set up by humans
+        # Reorder the landmarks as specified by the order argument only for the files containing the order_factor string.
         if order_factor is not None and order_factor in filen:
+            order_factor_found_at_least_in_one_file = True
+            if isinstance(order, str):
+                order = [int(val) for val in order.split(",")]
             data = np.array(data)
             data = data[order]
             data = data.tolist()
@@ -194,14 +207,17 @@ def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None,
         for feature in filen[filen.find(os.sep) + 1:].replace("_", ",").replace("-", ".").replace("/", ",").replace("\\", ",").split(","):
             row.append(feature) 
         data2write.append(row)
-    _export2csv(data2write, nb_landmark, indir, modif)
+    if order_factor is not None:
+        assert order_factor_found_at_least_in_one_file, "The order_factor (" + order_factor + ") provided has not been found in any file names."
+    _export2csv(data=data2write, nb_landmark=nb_landmark, indir=indir, feature_names=feature_names, modif=modif)
+
 
 
 def _usage():
     """usage
     Print usage to the user when using option -h or when invalid options are provided
     """
-    sys.exit("Scyland3D.py -i <input_directory> [-m <mirror_factor>] [-o <order> -f <order_factor>] [-v <verbosity_level>]")
+    sys.exit("Scyland3D.py -i <input_directory> [-m <mirror_factor>] [-o <order> -f <order_factor>] [-n <feature_names>] [-v <verbosity_level>]")
 
 
 def main(argv):
@@ -215,9 +231,10 @@ def main(argv):
     mirror_factor = None
     order = None
     order_factor = None
+    feature_names = None
     verbose = True
     try:
-        opts, args = getopt.getopt(argv,"hi:m:o:f:v:", ["indir=", "mirror_factor=", "order=", "order_factor=" "verbose="])
+        opts, args = getopt.getopt(argv,"hi:m:o:f:n:v:", ["indir=", "mirror_factor=", "order=", "order_factor=" "feature_names=" "verbose="])
     except getopt.GetoptError:
         _usage()
     for opt, arg in opts:
@@ -231,9 +248,11 @@ def main(argv):
             order = arg
         elif opt in ("-f", "--order_factor"):
             order_factor = arg
+        elif opt in ("-n", "--feature_names"):
+            feature_names = arg
         elif opt in ("-v", "--verbose"):
-            verbose = [True if arg == "True" or arg == "true" or arg == "t" or arg == "T" else False]
-    pts2csv(indir=indir, mirror_factor=mirror_factor, order=order, order_factor=order_factor, verbose=verbose)
+            verbose = True if arg == "True" or arg == "true" or arg == "t" or arg == "T" else False
+    pts2csv(indir=indir, mirror_factor=mirror_factor, order=order, order_factor=order_factor, feature_names=feature_names, verbose=verbose)
 
 
 if __name__ == '__main__':

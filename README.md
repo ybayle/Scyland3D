@@ -36,32 +36,39 @@ A landmark is a point set up by hand as opposed to a semilandmark that is interp
 
 ## API documentation
 
-The function `pts2csv()` is the core of **Scyland3D** and takes the following arguments:
+The function `pts2csv()` is the core of **Scyland3D** and is also called when using the script from the terminal with the following arguments:
 
 - *indir* (required)
     - A string containing the input directory where the files are stored. You can use any number of sub-directories. Folder and file names can specify the feature modalities separated by `_` (e.g. speciesA_ageX_sex1.pts).
+    - Default: "example/"
     - Example: `Scyland3D.pts2csv("example/")`
+    - Command line: `python Scyland3D.py -i "example/"`
 - *order* (optional)
-    - A list of integer indicating the new order to apply to the landmarks.
+    - A list of integer indicating the new order to apply to the landmarks. The order_factor argument must also be supplied.
     - Default: None
     - Example: `Scyland3D.pts2csv("example/", order_factor="upper", order=[36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37])`
+    - Command line: `python Scyland3D.py -i "example/" -f "upper" -o "36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37"`
 - *order_factor* (optional)
-    - A string containing the keyword for items that need their landmarks and semilandmarks to be reordered.
+    - A string containing the keyword for items that need their landmarks and semilandmarks to be reordered. The order argument must also be supplied.
     - Default: None
-    - Example: `Scyland3D.pts2csv("example/", order_factor="upper", order=[36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37])`
+    - Example: if the dataset contains lower and upper teeth where only the upper teeth need to be reordered, one can use: `Scyland3D.pts2csv("example/", order_factor="upper", order=[36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37])`
+    - Command line: `python Scyland3D.py -i "example/" -f "upper" -o "36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37"`. This is only valid if the keyword `upper` is present in the file name.
 - *feature_names* (optional)
     - A list of string containing the feature names.
     - Default: None
     - Example: `Scyland3D.pts2csv("example/", feature_names=["identifier", "species", "location", "length", "sex", "stage", "jaw", "position", "generation"])`
+    - Command line: `python Scyland3D.py -i "example/" -n "identifier,species,location,length,sex,stage,jaw,position,generation"`
 - *verbose* (optional)
     - A boolean indicating if information should be printed on the console by the process.
     - Default: True
-    - Example: `Scyland3D.pts2csv("example/", verbose=False)` for removing the display of information to the console.
+    - Example: `Scyland3D.pts2csv("example/", verbose=False)`
+    - Command line: `python Scyland3D.py -i "example/" -v False` for removing the display of information to the console.
 - *mirror_factor* (optional)
     - A string containing the keyword for items to be mirrored in the 3D space.
     - Default: None
-    - Example: `Scyland3D.pts2csv("example/", mirror_factor="upper")` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items as depicted in the figure below:
-    
+    - Example: `Scyland3D.pts2csv("example/", mirror_factor="upper")`
+    - Command line: `python Scyland3D.py -i "example/" -m "upper"` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items as depicted in the figure below:
+
 ![Landmarks on a tooth](paper/figure1.png)
 
 More information can be found on the [related article](https://github.com/openjournals/joss-papers/blob/joss.01153/joss.01153/10.21105.joss.01153.pdf).
