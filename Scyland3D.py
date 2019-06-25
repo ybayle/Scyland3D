@@ -149,10 +149,11 @@ def pts2csv(indir="example/", mirror_factor=None, order=None, order_factor=None,
         mirror_factor (str): The name of the factor to use for mirroring the landmarks on the z-axis.
         order (str or array of int): A string (if supplied by the command line) or an array of int (if called from another python script) indicating how to reorder the landmarks (e.g. "1,3,2" if supplied from the command line or [1, 3, 2] if supplied by another python script).
         order_factor (str): The name of the factor to use for reordering the landmarks.
+        feature_names (str or array of str): String describing each feature names separated with a comma or array of string (e.g. "age,sex,size" if supplied from the command line or ["age", "sex", "size"] if supplied in python script).
         verbose (bool): Whether to output details during the process.
     """
     assert os.path.exists(indir) and os.path.isdir(indir), indir + " not found."
-    assert (order is None and order_factor is None) or (order is not None and order_factor is not None and isinstance(order_factor, str)), "Must supply order and order_factor."
+    assert (order is None and order_factor is None) or (order is not None and order_factor is not None and (isinstance(order_factor, str) or isinstance(order_factor, list))), "Must supply order and order_factor."
     if indir[-1] != os.sep:
         indir += os.sep
 
@@ -253,6 +254,40 @@ def main(argv):
         elif opt in ("-v", "--verbose"):
             verbose = True if arg == "True" or arg == "true" or arg == "t" or arg == "T" else False
     pts2csv(indir=indir, mirror_factor=mirror_factor, order=order, order_factor=order_factor, feature_names=feature_names, verbose=verbose)
+
+
+def _same_file(filen1, filen2):
+    assert filen1 != filen2, "File names must be different."
+    with open(filen1, "r") as filep_ref:
+        with open(filen2, "r") as filep_test:
+            for line_ref, line_test in zip(filep_ref, filep_test):
+                assert line_ref == line_test, "Invalid line " + line_ref
+    return True
+
+
+def _validation_against_ref():
+    print("Testing default behavior...")
+    assert _same_file("landmarks.csv", "test/landmarks_ref.csv"), "Generated file does not match the default reference."
+    print("Ok!")
+    print("Testing reordering...")
+    assert _same_file("landmarks_reordered.csv", "test/landmarks_reordered_ref.csv"), "Generated file does not match the reference for the reordering."
+    print("Ok!")
+    print("Testing reversing...")
+    assert _same_file("landmarks_reversed.csv", "test/landmarks_reversed_ref.csv"), "Generated file does not match the reference for the reversing."
+    print("Ok!")
+
+
+def test_no_regression():
+    verbose = False
+    indir="example/"
+    order_factor = "upper"
+    order = [36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37]
+    mirror_factor = "upper"
+    feature_names = ["identifier", "species", "location", "length", "sex", "stage", "jaw", "position", "generation"]
+    pts2csv(indir=indir, mirror_factor=None, order=None, order_factor=None, feature_names=None, verbose=verbose)
+    pts2csv(indir=indir, mirror_factor=None, order=order, order_factor=order_factor, feature_names=None, verbose=verbose)
+    pts2csv(indir=indir, mirror_factor=mirror_factor, order=None, order_factor=None, feature_names=feature_names, verbose=verbose)
+    _validation_against_ref()
 
 
 if __name__ == '__main__':
