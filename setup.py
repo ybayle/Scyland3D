@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'Scyland3D',
-    version = '1.0.7',
+    version = '1.0.9',
     description = 'A Python package for processing 3D landmarks',
     long_description=open('README.md', 'r').read(),
     long_description_content_type="text/markdown",
@@ -11,6 +11,8 @@ setup(
     license='LICENSE',
     url = 'https://github.com/ybayle/Scyland3D',
     py_modules=['Scyland3D'],
+    include_package_data=True,
+    package_data={'Scyland3D': ['test/*', 'example/*', 'test.sh']},
     install_requires=[
         "numpy >= 1.13.3"
     ],
