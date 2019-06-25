@@ -1,8 +1,25 @@
-# CHANGELOG.md
+# CHANGELOG
+
+## 1.0.7 2019-06-26
+
+Add test files
+Format with black
+
+## 1.0.6 2019-06-25
+
+Add no regression tests
+
+## 1.0.5 2019-06-24
+
+Add command line support
+
+## 1.0.4 2019-06-23
+
+Python refactoring
 
 ## 1.0.3 2019-06-12
 
-Python refactor and added comment in the code #3 #7 #8 #9
+Python refactoring and added comment in the code #3 #7 #8 #9
 
 ## 1.0.2 2019-03-30
 

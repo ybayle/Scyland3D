@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'Scyland3D',
-    version = '1.0.5',
+    version = '1.0.7',
     description = 'A Python package for processing 3D landmarks',
     long_description=open('README.md', 'r').read(),
     long_description_content_type="text/markdown",
@@ -19,6 +19,7 @@ setup(
         Scyland3D=Scyland3D:main
     ''',
     classifiers=[
+        "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",

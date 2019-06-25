@@ -1,2 +1,3 @@
 include test/*
-include example/*/*
+include example/*
+include test.sh

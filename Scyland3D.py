@@ -5,7 +5,6 @@
 # License   MIT
 # Created   15/02/2018
 # Updated   25/06/2019
-# Version   1.0.5
 #
 
 import os
@@ -69,7 +68,9 @@ def _list_pts(indir):
     """
     assert os.path.exists(indir) and os.path.isdir(indir), indir + " not found."
     filenames = [
-        os.path.join(dp, f) for dp, dn, fn in os.walk(os.path.expanduser(indir)) for f in fn
+        os.path.join(dp, f)
+        for dp, dn, fn in os.walk(os.path.expanduser(indir))
+        for f in fn
     ]
     filenames = [filen for filen in filenames if ".pts" in filen]
     assert filenames, "There are no .pts files in " + indir
@@ -157,8 +158,21 @@ def _reverse_z(data):
     return data_mirror
 
 
+def _get_path(filen):
+    """_get_path
+    Return the absolute path of the provided file name from the absolute resources directory.
+
+    Args:
+        filen (str): The name of the file in the relative path of the package.
+
+    Returns:
+        An absolute path to the custom resources provided with the package.
+    """
+    return os.path.join(os.path.abspath(os.path.dirname(__file__)), filen)
+
+
 def pts2csv(
-    indir="example/",
+    indir=None,
     mirror_factor=None,
     order=None,
     order_factor=None,
@@ -180,6 +194,9 @@ def pts2csv(
         ["age", "sex", "size"] if supplied in python script).
         verbose (bool): Whether to output details during the process.
     """
+    if indir is None:
+        indir = _get_path("example/")
+        print("Using default example directory: " + indir)
     assert os.path.exists(indir) and os.path.isdir(indir), indir + " not found."
     assert (order is None and order_factor is None) or (
         order is not None
@@ -199,7 +216,9 @@ def pts2csv(
         if verbose:
             print(str(index + 1) + "/" + str(len(list_pts_files)) + " " + filen)
         # Count the number of feature in that file
-        nb_detected_feature = filen[filen.find(os.sep) + 1 :].count("_") + filen.count(os.sep)
+        nb_detected_feature = filen[filen.find(os.sep) + 1 :].count("_") + filen.count(
+            os.sep
+        )
         if nb_feature == 0:
             # Use the number of features from the first .pts file as reference
             nb_feature = nb_detected_feature
@@ -234,7 +253,11 @@ def pts2csv(
         )
         modif = ""
         # Apply a z-axis mirror to the landmarks to study left-right differences in the given species
-        if mirror_factor is not None and isinstance(mirror_factor, str) and mirror_factor in filen:
+        if (
+            mirror_factor is not None
+            and isinstance(mirror_factor, str)
+            and mirror_factor in filen
+        ):
             data = _reverse_z(data)
             modif += "_reversed"
         # Reorder the landmarks as specified by the order argument only for the files containing the
@@ -248,7 +271,7 @@ def pts2csv(
             data = data.tolist()
             modif += "_reordered"
         # Add new row to data
-        row = [filen]
+        row = ["/".join(filen.split(os.sep)[-2:])]
         data = np.array(data)
         for val in data.reshape(data.shape[0] * data.shape[1]):
             row.append(val)
@@ -257,18 +280,23 @@ def pts2csv(
             filen[filen.find(os.sep) + 1 :]
             .replace("_", ",")
             .replace("-", ".")
-            .replace("/", ",")
-            .replace("\\", ",")
+            .split(os.sep)[-1]
             .split(",")
         ):
             row.append(feature)
         data2write.append(row)
     if order_factor is not None:
         assert order_factor_found_at_least_in_one_file, (
-            "The order_factor (" + order_factor + ") provided has not been found in any file names."
+            "The order_factor ("
+            + order_factor
+            + ") provided has not been found in any file names."
         )
     _export2csv(
-        data=data2write, nb_landmark=nb_landmark, indir=indir, feature_names=feature_names, modif=modif,
+        data=data2write,
+        nb_landmark=nb_landmark,
+        indir=indir,
+        feature_names=feature_names,
+        modif=modif,
     )
 
 
@@ -288,7 +316,7 @@ def main(argv):
     Args:
         argv (array): The list of arguments.
     """
-    indir = "example/"
+    indir = None
     mirror_factor = None
     order = None
     order_factor = None
@@ -296,7 +324,15 @@ def main(argv):
     verbose = True
     try:
         opts, args = getopt.getopt(
-            argv,     "hi:m:o:f:n:v:",     ["indir=", "mirror_factor=", "order=", "order_factor=" "feature_names=" "verbose="], )
+            argv,
+            "hi:m:o:f:n:v:",
+            [
+                "indir=",
+                "mirror_factor=",
+                "order=",
+                "order_factor=" "feature_names=" "verbose=",
+            ],
+        )
     except getopt.GetoptError:
         _usage()
     for opt, arg in opts:
@@ -313,9 +349,18 @@ def main(argv):
         elif opt in ("-n", "--feature_names"):
             feature_names = arg
         elif opt in ("-v", "--verbose"):
-            verbose = True if arg == "True" or arg == "true" or arg == "t" or arg == "T" else False
+            verbose = (
+                True
+                if arg == "True" or arg == "true" or arg == "t" or arg == "T"
+                else False
+            )
     pts2csv(
-        indir=indir, mirror_factor=mirror_factor, order=order, order_factor=order_factor, feature_names=feature_names, verbose=verbose,
+        indir=indir,
+        mirror_factor=mirror_factor,
+        order=order,
+        order_factor=order_factor,
+        feature_names=feature_names,
+        verbose=verbose,
     )
 
 
@@ -330,41 +375,98 @@ def _same_file(filen1, filen2):
 
 def _validation_against_ref():
     print("Testing default behavior...")
+    dirn = _get_path("./")
     assert _same_file(
-        "landmarks.csv", "test/landmarks_ref.csv"
+        dirn + "landmarks.csv", dirn + "test/landmarks_ref.csv"
     ), "Generated file does not match the default reference."
     print("Ok!")
     print("Testing reordering...")
     assert _same_file(
-        "landmarks_reordered.csv", "test/landmarks_reordered_ref.csv"
+        dirn + "landmarks_reordered.csv", dirn + "test/landmarks_reordered_ref.csv"
     ), "Generated file does not match the reference for the reordering."
     print("Ok!")
     print("Testing reversing...")
     assert _same_file(
-        "landmarks_reversed.csv", "test/landmarks_reversed_ref.csv"
+        dirn + "landmarks_reversed.csv", dirn + "test/landmarks_reversed_ref.csv"
     ), "Generated file does not match the reference for the reversing."
     print("Ok!")
 
 
 def test_no_regression():
     verbose = False
-    indir = "example/"
     order_factor = "upper"
-    order = [36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20,
-        19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37
+    order = [
+        36,
+        35,
+        34,
+        33,
+        32,
+        31,
+        30,
+        29,
+        28,
+        27,
+        26,
+        25,
+        24,
+        23,
+        22,
+        21,
+        20,
+        19,
+        18,
+        17,
+        16,
+        15,
+        14,
+        13,
+        12,
+        11,
+        10,
+        9,
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1,
+        0,
+        37,
     ]
     mirror_factor = "upper"
     feature_names = [
-        "identifier", "species", "location", "length", "sex", "stage", "jaw", "position", "generation",
+        "identifier",
+        "species",
+        "location",
+        "length",
+        "sex",
+        "stage",
+        "jaw",
+        "position",
+        "generation",
     ]
     pts2csv(
-        indir=indir, mirror_factor=None, order=None, order_factor=None, feature_names=None, verbose=verbose,
+        mirror_factor=None,
+        order=None,
+        order_factor=None,
+        feature_names=None,
+        verbose=verbose,
     )
     pts2csv(
-        indir=indir, mirror_factor=None, order=order, order_factor=order_factor, feature_names=None, verbose=verbose,
+        mirror_factor=None,
+        order=order,
+        order_factor=order_factor,
+        feature_names=None,
+        verbose=verbose,
     )
     pts2csv(
-        indir=indir, mirror_factor=mirror_factor, order=None, order_factor=None, feature_names=feature_names, verbose=verbose,
+        mirror_factor=mirror_factor,
+        order=None,
+        order_factor=None,
+        feature_names=feature_names,
+        verbose=verbose,
     )
     _validation_against_ref()
 

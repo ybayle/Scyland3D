@@ -2,6 +2,7 @@
 __pycache__
 Scyland3D.egg-info/
 dist/
+build/
 
 # Scyland3D
 landmarks.csv
