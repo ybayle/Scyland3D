@@ -4,7 +4,8 @@ setup(
     name = 'Scyland3D',
     version = '1.0.5',
     description = 'A Python package for processing 3D landmarks',
-    long_description=open('README.md').read(),
+    long_description=open('README.md', 'r').read(),
+    long_description_content_type="text/markdown",
     author = 'Fidji Berio and Yann Bayle',
     author_email = 'bayle.yann@live.fr',
     license='LICENSE',
@@ -17,4 +18,9 @@ setup(
         [console_scripts]
         Scyland3D=Scyland3D:main
     ''',
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+    ],
 )
