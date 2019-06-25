@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name = 'Scyland3D',
-    version = '1.0.3',
+    version = '1.0.5',
     description = 'A Python package for processing 3D landmarks',
     long_description=open('README.md').read(),
     author = 'Fidji Berio and Yann Bayle',
