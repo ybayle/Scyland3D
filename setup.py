@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name = 'Scyland3D',
-    version = '1.0.15',
+    version = '1.0.16',
     description = 'A Python package for processing 3D landmarks',
     long_description=open('README.md', 'r').read(),
     long_description_content_type="text/markdown",
@@ -22,7 +22,7 @@ setup(
         Scyland3D=Scyland3D:main
     ''',
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 2",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
