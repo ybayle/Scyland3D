@@ -69,7 +69,7 @@ The function `pts2csv()` is the core of **Scyland3D** and is also called when us
     - Example: `Scyland3D.pts2csv(mirror_factor="upper")`
     - Command line: `python Scyland3D.py -m "upper"` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items as depicted in the figure below:
 
-![Landmarks on a tooth](paper/figure1.png)
+![Landmarks on a tooth](https://raw.githubusercontent.com/ybayle/Scyland3D/master/paper/figure1.png)
 
 More information can be found on the [related article](https://github.com/openjournals/joss-papers/blob/joss.01153/joss.01153/10.21105.joss.01153.pdf).
 
