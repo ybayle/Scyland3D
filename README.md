@@ -42,32 +42,37 @@ The function `pts2csv()` is the core of **Scyland3D** and is also called when us
     - A string containing the input directory where the files are stored. File names can specify the feature modalities separated by `_` (e.g. speciesA_ageX_sex1.pts).
     - Default: Use the "example/" folder
     - Example: `Scyland3D.pts2csv("path/")`
-    - Command line: `python Scyland3D.py -i "path/"`
+    - Command line: `python -m Scyland3D.Scyland3D -i "path/"`
+- *outdir* (optional)
+    - A string containing the output directory where the files will be generated.
+    - Default: Use the current folder.
+    - Example: `Scyland3D.pts2csv(outdir="path/")`
+    - Command line: `python -m Scyland3D.Scyland3D -o "path/"`
 - *order* (optional)
     - A list of integer indicating the new order to apply to the landmarks. The order_factor argument must also be supplied.
     - Default: None
     - Example: `Scyland3D.pts2csv(order_factor="upper", order=[36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37])`
-    - Command line: `python Scyland3D.py -f "upper" -o "36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37"`
+    - Command line: `python -m Scyland3D.Scyland3D -f "upper" -r "36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37"`
 - *order_factor* (optional)
     - A string containing the keyword for items that need their landmarks and semilandmarks to be reordered. The order argument must also be supplied.
     - Default: None
     - Example: if the dataset contains lower and upper teeth where only the upper teeth need to be reordered, one can use: `Scyland3D.pts2csv(order_factor="upper", order=[36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37])`
-    - Command line: `python Scyland3D.py -f "upper" -o "36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37"`. This is only valid if the keyword `upper` is present in the file name.
+    - Command line: `python -m Scyland3D.Scyland3D -f "upper" -o "36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37"`. This is only valid if the keyword `upper` is present in the file name.
 - *feature_names* (optional)
     - A list of string containing the feature names.
     - Default: None
     - Example: `Scyland3D.pts2csv(feature_names=["identifier", "species", "location", "length", "sex", "stage", "jaw", "position", "generation"])`
-    - Command line: `python Scyland3D.py -n "identifier,species,location,length,sex,stage,jaw,position,generation"`
+    - Command line: `python -m Scyland3D.Scyland3D -n "identifier,species,location,length,sex,stage,jaw,position,generation"`
 - *verbose* (optional)
     - A boolean indicating if information should be printed on the console by the process.
     - Default: True
     - Example: `Scyland3D.pts2csv(verbose=False)`
-    - Command line: `python Scyland3D.py -v False` for removing the display of information to the console.
+    - Command line: `python -m Scyland3D.Scyland3D -v False` for removing the display of information to the console.
 - *mirror_factor* (optional)
     - A string containing the keyword for items to be mirrored in the 3D space.
     - Default: None
     - Example: `Scyland3D.pts2csv(mirror_factor="upper")`
-    - Command line: `python Scyland3D.py -m "upper"` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items as depicted in the figure below:
+    - Command line: `python -m Scyland3D.Scyland3D -m "upper"` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items as depicted in the figure below:
 
 ![Landmarks on a tooth](https://raw.githubusercontent.com/ybayle/Scyland3D/master/paper/figure1.png)
 
