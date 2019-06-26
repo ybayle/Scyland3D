@@ -14,14 +14,15 @@ import getopt
 import numpy as np
 
 
-def _export2csv(data, nb_landmark, indir, feature_names=None, modif=""):
+def _export2csv(data, nb_landmark, outdir=None, feature_names=None, modif=""):
     """export2csv
     Export data to a CSV named indir + "../landmarks" + modif + ".csv".
 
     Args:
         data (array): The landmarks to export.
         nb_landmark (int): The number of landmarks.
-        indir (str): The name of the directory where the output files will be stored.
+        outdir (str): The name of the directory where the output files will be stored. If not
+            provided the current working directory will be used.
         feature_names (str or array of str): String describing each feature names separated with a
             comma or array of string (e.g. "age,sex,size" if supplied from the command line or
             ["age", "sex", "size"] if supplied in python script).
@@ -41,9 +42,9 @@ def _export2csv(data, nb_landmark, indir, feature_names=None, modif=""):
         assert nb_feature == len(feature_names), (
             "The number of feature names provided ("
             + str(len(feature_names))
-            + ") does not match the number of features detected in the files "
+            + ") does not match the number of features detected in the files ("
             + str(nb_feature)
-            + "."
+            + ")."
         )
         for feature_name in feature_names:
             fieldnames.append(feature_name)
@@ -51,9 +52,13 @@ def _export2csv(data, nb_landmark, indir, feature_names=None, modif=""):
         for numb in range(1, nb_feature + 1):
             fieldnames.append("Feature" + str(numb))
     # Export the header and the data
-    with open(indir + "../landmarks" + modif + ".csv", "w") as out_file:
+    if outdir is None:
+        outdir = "./"
+    output_filename = os.path.join(os.path.abspath(outdir), "landmarks" + modif + ".csv")
+    with open(output_filename, "w") as out_file:
         csv.DictWriter(out_file, fieldnames=fieldnames).writeheader()
         csv.writer(out_file).writerows(data)
+    print("File successfully generated: " + output_filename)
 
 
 def _list_pts(indir):
@@ -173,6 +178,7 @@ def _get_path(filen):
 
 def pts2csv(
     indir=None,
+    outdir=None,
     mirror_factor=None,
     order=None,
     order_factor=None,
@@ -275,7 +281,7 @@ def pts2csv(
         data = np.array(data)
         for val in data.reshape(data.shape[0] * data.shape[1]):
             row.append(val)
-        filen = filen.split(".")[0]
+        filen = filen.split(".")[-2]
         for feature in (
             filen[filen.find(os.sep) + 1 :]
             .replace("_", ",")
@@ -292,9 +298,9 @@ def pts2csv(
             + ") provided has not been found in any file names."
         )
     _export2csv(
+        outdir=outdir,
         data=data2write,
         nb_landmark=nb_landmark,
-        indir=indir,
         feature_names=feature_names,
         modif=modif,
     )
@@ -317,6 +323,7 @@ def main(argv):
         argv (array): The list of arguments.
     """
     indir = None
+    outdir = None
     mirror_factor = None
     order = None
     order_factor = None
@@ -325,12 +332,13 @@ def main(argv):
     try:
         opts, args = getopt.getopt(
             argv,
-            "hi:m:o:f:n:v:",
+            "hi:o:m:r:f:n:v:",
             [
                 "indir=",
+                "outdir=",
                 "mirror_factor=",
                 "order=",
-                "order_factor=" "feature_names=" "verbose=",
+                "order_factor=", "feature_names=", "verbose=",
             ],
         )
     except getopt.GetoptError:
@@ -340,9 +348,11 @@ def main(argv):
             _usage()
         elif opt in ("-i", "--indir"):
             indir = arg
+        elif opt in ("-o", "--outdir"):
+            outdir = arg
         elif opt in ("-m", "--mirror_factor"):
             mirror_factor = arg
-        elif opt in ("-o", "--order"):
+        elif opt in ("-r", "--order"):
             order = arg
         elif opt in ("-f", "--order_factor"):
             order_factor = arg
@@ -356,6 +366,7 @@ def main(argv):
             )
     pts2csv(
         indir=indir,
+        outdir=outdir,
         mirror_factor=mirror_factor,
         order=order,
         order_factor=order_factor,
@@ -395,6 +406,7 @@ def _validation_against_ref():
 def test_no_regression():
     verbose = False
     order_factor = "upper"
+    outdir = _get_path("./")
     order = [
         36,
         35,
@@ -448,6 +460,7 @@ def test_no_regression():
         "generation",
     ]
     pts2csv(
+        outdir=outdir,
         mirror_factor=None,
         order=None,
         order_factor=None,
@@ -455,6 +468,7 @@ def test_no_regression():
         verbose=verbose,
     )
     pts2csv(
+        outdir=outdir,
         mirror_factor=None,
         order=order,
         order_factor=order_factor,
@@ -462,6 +476,7 @@ def test_no_regression():
         verbose=verbose,
     )
     pts2csv(
+        outdir=outdir,
         mirror_factor=mirror_factor,
         order=None,
         order_factor=None,

@@ -1,3 +1,6 @@
-include test/*
-include example/*
+# Include the README
+include *.md
+
+recursive-include Scyland3D/example *
+recursive-include Scyland3D/test *
 include test.sh
