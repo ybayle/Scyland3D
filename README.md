@@ -25,7 +25,7 @@ If you encounter an error with other versions, please [submit an issue](https://
 To quickly process landmarks files, you can give **Scyland3D** the path to the folder containing the `.pts` files (format defined on page 37 in http://www.idav.ucdavis.edu/research/projects/EvoMorph/supplement/LandmarkDoc_v3_b6.pdf), as shown in the example files provided:
 
 ```
-import Scyland3D
+from Scyland3D import Scyland3D
 Scyland3D.pts2csv("example/")
 ```
 
