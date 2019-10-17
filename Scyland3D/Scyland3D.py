@@ -380,7 +380,7 @@ def _same_file(filen1, filen2):
     with open(filen1, "r") as filep_ref:
         with open(filen2, "r") as filep_test:
             for line_ref, line_test in zip(filep_ref, filep_test):
-                assert line_ref == line_test, "Invalid line " + line_ref
+                assert line_ref == line_test, "Invalid line generated:\n" + line_test + "\nthat is different from the reference file:\n" + line_ref
     return True
 
 
