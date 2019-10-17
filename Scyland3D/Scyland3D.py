@@ -311,7 +311,7 @@ def _usage():
     Print usage to the user when using option -h or when invalid options are provided
     """
     sys.exit(
-        "Scyland3D.py -i <input_directory> [-m <mirror_factor>] [-o <order> -f <order_factor>] [-n <feature_names>] [-v <verbosity_level>]"
+        "Scyland3D.py -i <input_directory> [-m <mirror_factor>] [-r <order> -f <order_factor>] [-n <feature_names>] [-v <verbosity_level>] [-r <output_directory_name>]"
     )
 
 
@@ -343,36 +343,39 @@ def main(argv):
         )
     except getopt.GetoptError:
         _usage()
-    for opt, arg in opts:
-        if opt == "-h":
-            _usage()
-        elif opt in ("-i", "--indir"):
-            indir = arg
-        elif opt in ("-o", "--outdir"):
-            outdir = arg
-        elif opt in ("-m", "--mirror_factor"):
-            mirror_factor = arg
-        elif opt in ("-r", "--order"):
-            order = arg
-        elif opt in ("-f", "--order_factor"):
-            order_factor = arg
-        elif opt in ("-n", "--feature_names"):
-            feature_names = arg
-        elif opt in ("-v", "--verbose"):
-            verbose = (
-                True
-                if arg == "True" or arg == "true" or arg == "t" or arg == "T"
-                else False
-            )
-    pts2csv(
-        indir=indir,
-        outdir=outdir,
-        mirror_factor=mirror_factor,
-        order=order,
-        order_factor=order_factor,
-        feature_names=feature_names,
-        verbose=verbose,
-    )
+    if len(args) == 0:
+        _usage()
+    else:
+        for opt, arg in opts:
+            if opt == "-h":
+                _usage()
+            elif opt in ("-i", "--indir"):
+                indir = arg
+            elif opt in ("-o", "--outdir"):
+                outdir = arg
+            elif opt in ("-m", "--mirror_factor"):
+                mirror_factor = arg
+            elif opt in ("-r", "--order"):
+                order = arg
+            elif opt in ("-f", "--order_factor"):
+                order_factor = arg
+            elif opt in ("-n", "--feature_names"):
+                feature_names = arg
+            elif opt in ("-v", "--verbose"):
+                verbose = (
+                    True
+                    if arg == "True" or arg == "true" or arg == "t" or arg == "T"
+                    else False
+                )
+        pts2csv(
+            indir=indir,
+            outdir=outdir,
+            mirror_factor=mirror_factor,
+            order=order,
+            order_factor=order_factor,
+            feature_names=feature_names,
+            verbose=verbose,
+        )
 
 
 def _same_file(filen1, filen2):
