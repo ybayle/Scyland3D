@@ -154,6 +154,7 @@ def _reverse_z(data):
         x = xyz[0]
         y = xyz[1]
         z = xyz[2]
+        # Compute the symmetry point
         t = float((D - A * x - B * y - C * z) / (A * A + B * B + C * C))
         xp = float(x + 2.0 * A * t)
         yp = float(y + 2.0 * B * t)
