@@ -28,13 +28,16 @@ def _export2csv(data, nb_landmark, outdir=None, feature_names=None, modif=""):
         modif (str): The name of the modification applied to the data (e.g. none, reversed, and/or
             reordered).
     """
-    # Generate the header of the csv
+    # Generate the header of the csv and store it in fieldnames
     fieldnames = ["ID"]
     assert nb_landmark > 0, "The number of landmarks must be positive."
+    # First add the numbered coordinates (e.g. x1,y1,z1,...,xN,yN,zN)
     for numb in range(1, nb_landmark + 1):
         for axe in ["x", "y", "z"]:
             fieldnames.append(axe + str(numb))
+    # Gather the number of features
     nb_feature = len(data[0]) - nb_landmark * 3 - 1
+    # Use generic feature names for the header if no feature_names has been provided by the user
     if feature_names is not None:
         if isinstance(feature_names, str):
             feature_names = feature_names.split(",")
@@ -50,10 +53,11 @@ def _export2csv(data, nb_landmark, outdir=None, feature_names=None, modif=""):
     else:
         for numb in range(1, nb_feature + 1):
             fieldnames.append("Feature" + str(numb))
-    # Export the header and the data
+    # Use the current folder if not output directory has been supplied by the user
     if outdir is None:
         outdir = "./"
     output_filename = os.path.join(os.path.abspath(outdir), "landmarks" + modif + ".csv")
+    # Export the header and the data
     with open(output_filename, "w") as out_file:
         csv.DictWriter(out_file, fieldnames=fieldnames).writeheader()
         csv.writer(out_file).writerows(data)
@@ -91,13 +95,15 @@ def _remove_duplicates(data):
     Returns:
         An array of landmarks where duplicates were removed.
     """
-    # Remove easy duplicates where the string are an exact match
+    # Remove easy duplicates in the coordinates where the string are an exact match
     data = sorted(set(data), key=data.index)
-    # Remove duplicates because some landmarks and semilandmarks are sometimes exported twice.
+    # Remove the other duplicates because some landmarks and semilandmarks are sometimes exported twice.
     coord = []
+    # Convert the coordinates from str to float
     for item in data:
         coord.append([float(xyz) for xyz in item.split(",")])
     index_to_remove = []
+    # Check which landmarks have similar coordinates
     for k in range(3):
         for i in range(len(coord) - 1):
             for j in range(len(coord) - i - 1):
@@ -110,6 +116,7 @@ def _remove_duplicates(data):
                         coord[i][tmp[1]] == coord[i + j + 1][tmp[1]]
                     ):
                         index_to_remove.append(i + j + 1)
+    # Return only landmarks that have not been detected as duplicates 
     new_data = []
     for i, item in enumerate(coord):
         if i not in index_to_remove:
@@ -135,18 +142,23 @@ def _reverse_z(data):
     """
     matrix_xy = []
     matrix_z = []
+    # Split the coordinates in an xy plane and a z axis
     for xyz in data:
         x = xyz[0]
         y = xyz[1]
         z = xyz[2]
         matrix_xy.append([x, y, 1])
         matrix_z.append(z)
+    # Gather the coefficients for a linear fitting
     b = np.matrix(matrix_z).T
     A = np.matrix(matrix_xy)
+    # Compute the linear fit for the plane going through all landmarks points
     fit = (A.T * A).I * A.T * b
 
+    # Gather the parameters for the plane
     A = fit[0]
     B = fit[1]
+    # Compute the inversion coefficients for the mirroring
     C = -1.0
     D = -fit[2]
     data_mirror = []
@@ -156,6 +168,7 @@ def _reverse_z(data):
         z = xyz[2]
         # Compute the symmetry point
         t = float((D - A * x - B * y - C * z) / (A * A + B * B + C * C))
+        # Compute the resulting value for the mirrored points
         xp = float(x + 2.0 * A * t)
         yp = float(y + 2.0 * B * t)
         zp = float(z + 2.0 * C * t)
@@ -304,6 +317,16 @@ def pts2csv(
 
 
 def _same_file(filen1, filen2):
+    """_same_file
+    Return True if filen1 and filen2 contains the same data
+
+    Args:
+        filen1 (str): The path and name of the first filename
+        filen2 (str): The path and name of the second filename
+
+    Returns:
+        A bool indicating if the two files contains the same data 
+    """
     assert filen1 != filen2, "File names must be different."
     with open(filen1, "r") as filep_ref:
         with open(filen2, "r") as filep_test:
@@ -313,6 +336,15 @@ def _same_file(filen1, filen2):
 
 
 def _validation_against_ref():
+    """_validation_against_ref
+    
+    Tests whether the generated file corresponds to the reference file to check for regressions
+
+    Args:
+        None
+    Returns:
+        None
+    """
     print("Testing default behavior...")
     dirn = _get_path("./")
     assert _same_file(
@@ -332,6 +364,15 @@ def _validation_against_ref():
 
 
 def test_no_regression():
+    """test_no_regression
+
+    Verify that no regression are found between the new generated files and the reference files
+
+    Args:
+        None
+    Returns:
+        None
+    """
     indir = _get_path("example/")
     verbose = False
     order_factor = "upper"
