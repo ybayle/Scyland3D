@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.8 2019-10-19
+
+Fix ReadMe for package usage
+Fix test.sh
+Move from getopt to argparse
+
 ## 1.0.7 2019-06-26
 
 Add test files

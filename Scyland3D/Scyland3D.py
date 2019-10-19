@@ -4,13 +4,12 @@
 # E-mails   fidji.berio@ens-lyon.fr and bayle.yann@live.fr
 # License   MIT
 # Created   15/02/2018
-# Updated   25/06/2019
 #
 
 import os
 import csv
 import sys
-import getopt
+import argparse
 import numpy as np
 
 
@@ -200,9 +199,6 @@ def pts2csv(
         ["age", "sex", "size"] if supplied in python script).
         verbose (bool): Whether to output details during the process.
     """
-    if indir is None:
-        indir = _get_path("example/")
-        print("Using default example directory: " + indir)
     assert os.path.exists(indir) and os.path.isdir(indir), indir + " not found."
     assert (order is None and order_factor is None) or (
         order is not None
@@ -306,78 +302,6 @@ def pts2csv(
     )
 
 
-def _usage():
-    """usage
-    Print usage to the user when using option -h or when invalid options are provided
-    """
-    sys.exit(
-        "Scyland3D.py -i <input_directory> [-m <mirror_factor>] [-r <order> -f <order_factor>] [-n <feature_names>] [-v <verbosity_level>] [-r <output_directory_name>]"
-    )
-
-
-def main(argv):
-    """main entry point
-    Parse arguments and call the function to convert multiple .pts files to a single csv file
-
-    Args:
-        argv (array): The list of arguments.
-    """
-    indir = None
-    outdir = None
-    mirror_factor = None
-    order = None
-    order_factor = None
-    feature_names = None
-    verbose = True
-    try:
-        opts, args = getopt.getopt(
-            argv,
-            "hi:o:m:r:f:n:v:",
-            [
-                "indir=",
-                "outdir=",
-                "mirror_factor=",
-                "order=",
-                "order_factor=", "feature_names=", "verbose=",
-            ],
-        )
-    except getopt.GetoptError:
-        _usage()
-    if len(args) == 0:
-        _usage()
-    else:
-        for opt, arg in opts:
-            if opt == "-h":
-                _usage()
-            elif opt in ("-i", "--indir"):
-                indir = arg
-            elif opt in ("-o", "--outdir"):
-                outdir = arg
-            elif opt in ("-m", "--mirror_factor"):
-                mirror_factor = arg
-            elif opt in ("-r", "--order"):
-                order = arg
-            elif opt in ("-f", "--order_factor"):
-                order_factor = arg
-            elif opt in ("-n", "--feature_names"):
-                feature_names = arg
-            elif opt in ("-v", "--verbose"):
-                verbose = (
-                    True
-                    if arg == "True" or arg == "true" or arg == "t" or arg == "T"
-                    else False
-                )
-        pts2csv(
-            indir=indir,
-            outdir=outdir,
-            mirror_factor=mirror_factor,
-            order=order,
-            order_factor=order_factor,
-            feature_names=feature_names,
-            verbose=verbose,
-        )
-
-
 def _same_file(filen1, filen2):
     assert filen1 != filen2, "File names must be different."
     with open(filen1, "r") as filep_ref:
@@ -407,6 +331,7 @@ def _validation_against_ref():
 
 
 def test_no_regression():
+    indir = _get_path("example/")
     verbose = False
     order_factor = "upper"
     outdir = _get_path("./")
@@ -463,6 +388,7 @@ def test_no_regression():
         "generation",
     ]
     pts2csv(
+        indir=indir,
         outdir=outdir,
         mirror_factor=None,
         order=None,
@@ -471,6 +397,7 @@ def test_no_regression():
         verbose=verbose,
     )
     pts2csv(
+        indir=indir,
         outdir=outdir,
         mirror_factor=None,
         order=order,
@@ -479,6 +406,7 @@ def test_no_regression():
         verbose=verbose,
     )
     pts2csv(
+        indir=indir,
         outdir=outdir,
         mirror_factor=mirror_factor,
         order=None,
@@ -490,4 +418,19 @@ def test_no_regression():
 
 
 if __name__ == "__main__":
-    main(sys.argv[1:])
+    """main entry point
+    Parse arguments and call the function to convert multiple .pts files to a single csv file
+    """
+    parser = argparse.ArgumentParser(description='Scyland3D: Processing 3D landmarks.')
+    parser.add_argument('-i', '--indir', type=str, help='the input directory containing the landmarks to process')
+    parser.add_argument('-o', '--outdir', help='the output directory containing the landmarks to process')
+    parser.add_argument('-m', '--mirror_factor', help='the factor to be used when mirroring the corresponding landmarks')
+    parser.add_argument('-r', '--order', help='the new order to apply to the landmarks')
+    parser.add_argument('-f', '--order_factor',help='the factor to be used when reordering the corresponding landmarks')
+    parser.add_argument('-n', '--feature_names', help='the feature names to use in the header in the output file')
+    parser.add_argument('-v', '--verbose', default=False, action="store_true", help='whether to output the processing steps')
+    if len(sys.argv) == 1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
+    args = parser.parse_args()
+    pts2csv(args.indir, args.outdir, args.mirror_factor, args.order, args.order_factor, args.feature_names, args.verbose)
