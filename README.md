@@ -34,6 +34,12 @@ The example files provided come from a subset of our dataset for studying teeth 
 We provide 7 landmark and 31 semilandmark coordinates for 2 upper teeth and for 3 lower ones, stored in two folders that describe the specimens they belong to.
 A landmark is a point set up by hand as opposed to a semilandmark that is interpolated by the computer between two landmarks by following the curvature of the studied form.
 
+Below, the image A is the representation of 7 landmarks for an input right shark tooth and the image B is the output produced by Scyland3D when using the options to mirror and reorder the landmarks.
+This process can be used to process right teeth in order to superimpose and compare them with left teeth in order to compare analogous elements.
+More information can be found on the [related article](https://github.com/openjournals/joss-papers/blob/joss.01153/joss.01153/10.21105.joss.01153.pdf).
+
+![Landmarks on a tooth](https://raw.githubusercontent.com/ybayle/Scyland3D/master/paper/figure1.png)
+
 ## API documentation
 
 The function `pts2csv()` is the core of **Scyland3D** and is also called when using the script from the terminal with the following arguments:
@@ -73,10 +79,6 @@ The function `pts2csv()` is the core of **Scyland3D** and is also called when us
     - Default: None
     - Example: `Scyland3D.pts2csv(mirror_factor="upper")`
     - Command line: `python -m Scyland3D.Scyland3D -m "upper"` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items as depicted in the figure below:
-
-![Landmarks on a tooth](https://raw.githubusercontent.com/ybayle/Scyland3D/master/paper/figure1.png)
-
-More information can be found on the [related article](https://github.com/openjournals/joss-papers/blob/joss.01153/joss.01153/10.21105.joss.01153.pdf).
 
 ## How To Contribute
 
