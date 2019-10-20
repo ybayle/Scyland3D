@@ -62,7 +62,9 @@ def _export2csv(data, nb_landmark, outdir=None, feature_names=None, modif=""):
         outdir = "./"
     output_filename = os.path.join(os.path.abspath(outdir), "landmarks" + modif + ".csv")
     # Export the header and the data
-    with open(output_filename, "w") as out_file:
+    # newline='' is use to fix #11. On Windows the csv package add an extra '\r' that is not
+    # observed on Unix systems.
+    with open(output_filename, "w", newline='') as out_file:
         csv.DictWriter(out_file, fieldnames=fieldnames).writeheader()
         csv.writer(out_file).writerows(data)
     print("File successfully generated: " + output_filename)
@@ -85,6 +87,8 @@ def _list_pts(indir):
         for f in fn
     ]
     filenames = [filen for filen in filenames if ".pts" in filen]
+    # Fix #11 by sorting filenames to guarantee consistency between OS.
+    filenames.sort()
     assert filenames, "There are no .pts files in " + indir
     return filenames
 
@@ -292,8 +296,12 @@ def pts2csv(
             data = data[order]
             data = data.tolist()
             modif += "_reordered"
-        # Add new row to data
-        row = ["/".join(filen.split(os.sep)[-2:])]
+        # Add a new row to the data
+        # This first column contains an unique ID for each sample that corresponds to the file path
+        # and name.
+        # .replace("//", "/") replaces "//" by "/" that occurs on Windows. This is used to enable
+        # comparisons with reference files in tests for all OS.
+        row = ["/".join(filen.split(os.sep)[-2:]).replace("//", "/")]
         data = np.array(data)
         for val in data.reshape(data.shape[0] * data.shape[1]):
             row.append(val)
