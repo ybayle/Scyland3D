@@ -2,12 +2,14 @@
 
 ## 1.0.18 2019-10-20
 
-Refactor code's comments 
+Add details in ReadMe about the context of the included image #5
+Refactor code's comments #8
+Fix file names order consistency on all OS #11
 
 ## 1.0.17 2019-10-19
 
-Fix ReadMe for package usage
-Fix test.sh
+Fix ReadMe for package usage #10
+Fix test.sh #10
 Move from getopt to argparse
 
 ## 1.0.7 2019-06-26
