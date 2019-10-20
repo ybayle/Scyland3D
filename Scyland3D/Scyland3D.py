@@ -35,7 +35,11 @@ def _export2csv(data, nb_landmark, outdir=None, feature_names=None, modif=""):
     for numb in range(1, nb_landmark + 1):
         for axe in ["x", "y", "z"]:
             fieldnames.append(axe + str(numb))
-    # Gather the number of features
+    # Gather the number of features, i.e. observable variables, that corresponds to the length
+    # (i.e. number of columns) of one row of the data, minus the number of 3D coordinates,
+    # minus one that corresponds to the ID. Example:
+    # ID,x1,y1,z1,x2,y2,z2,...xN,yN,zN,feature1,feature2,...,featureM
+    # 200118G,25.6,11.6,23.9,26.5,23.5,14.9,...,25.5,11.5,23.8,mediterranean,female,...,mature
     nb_feature = len(data[0]) - nb_landmark * 3 - 1
     # Use generic feature names for the header if no feature_names has been provided by the user
     if feature_names is not None:
@@ -53,7 +57,7 @@ def _export2csv(data, nb_landmark, outdir=None, feature_names=None, modif=""):
     else:
         for numb in range(1, nb_feature + 1):
             fieldnames.append("Feature" + str(numb))
-    # Use the current folder if not output directory has been supplied by the user
+    # Use the current folder if no output directory has been supplied by the user
     if outdir is None:
         outdir = "./"
     output_filename = os.path.join(os.path.abspath(outdir), "landmarks" + modif + ".csv")
@@ -155,7 +159,7 @@ def _reverse_z(data):
     # Compute the linear fit for the plane going through all landmarks points
     fit = (A.T * A).I * A.T * b
 
-    # Gather the parameters for the plane
+    # Gather the parameters for the plane (A,B,C,D) defined by A*x + B*y + C*z + D
     A = fit[0]
     B = fit[1]
     # Compute the inversion coefficients for the mirroring
@@ -166,9 +170,11 @@ def _reverse_z(data):
         x = xyz[0]
         y = xyz[1]
         z = xyz[2]
-        # Compute the symmetry point
+        # Compute the symmetry point that is the intersection between the plane (A,B,C,D) and a
+        # perpendicular line to that plane that go through the point of interest defined by (x,y,z).
         t = float((D - A * x - B * y - C * z) / (A * A + B * B + C * C))
-        # Compute the resulting value for the mirrored points
+        # Compute the resulting value for the mirrored points where the new coordinate is equal to
+        # twice the distance between the old coordinate and the symmetry point.
         xp = float(x + 2.0 * A * t)
         yp = float(y + 2.0 * B * t)
         zp = float(z + 2.0 * C * t)

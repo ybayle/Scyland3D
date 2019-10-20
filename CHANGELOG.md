@@ -1,6 +1,10 @@
 # CHANGELOG
 
-## 1.0.8 2019-10-19
+## 1.0.18 2019-10-20
+
+Refactor code's comments 
+
+## 1.0.17 2019-10-19
 
 Fix ReadMe for package usage
 Fix test.sh
