@@ -357,6 +357,32 @@ def _same_file(filen1, filen2):
     return True
 
 
+def _same_file_up_to_epsilon(filen1, filen2, eps=1e-9):
+    """_same_file_up_to_epsilon
+    Return True if filen1 and filen2 contains the same float data up to epsilon
+
+    Args:
+        filen1 (str): The path and name of the first filename
+        filen2 (str): The path and name of the second filename
+        eps (float): The maximum tolerance for asserting that two floating point
+                     numbers are different
+
+    Returns:
+        A bool indicating if the two files contains the same data 
+    """
+    assert filen1 != filen2, "File names must be different."
+    with open(filen1, "r") as filep_ref:
+        with open(filen2, "r") as filep_test:
+            line_ref = next(filep_ref)
+            line_test = next(filep_test)
+            assert line_ref == line_test, "Invalid line generated for " + filen1 + ":\n" + line_test + "\nthat is different from the reference file " + filen2 + ":\n" + line_ref
+            for line_ref, line_test in zip(filep_ref, filep_test):
+                # Checks that the 38 3D landmarks generated are equal up to epsilon to the reference
+                for val_ref, val_test in zip(line_test.split(",")[1:38 * 3 + 1], line_test.split(",")[1:38 * 3 + 1]):
+                    assert abs(float(val_ref) - float(val_test)) < eps, "Invalid value detected for " + filen1 + ":\n" + line_test + "\nthat is different from the reference file " + filen2 + ":\n" + line_ref
+    return True
+
+
 def _validation_against_ref():
     """_validation_against_ref
     
@@ -379,7 +405,10 @@ def _validation_against_ref():
     ), "Generated file does not match the reference for the reordering."
     print("Ok!")
     print("Testing reversing...")
-    assert _same_file(
+    # The reversing applied mathematical operations on the data so numerical
+    # differences is observed between OS. A comparison up to epsilon is thus
+    # made.
+    assert _same_file_up_to_epsilon(
         dirn + "landmarks_reversed.csv", dirn + "test/landmarks_reversed_ref.csv"
     ), "Generated file does not match the reference for the reversing."
     print("Ok!")
