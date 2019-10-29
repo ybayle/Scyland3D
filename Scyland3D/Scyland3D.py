@@ -64,7 +64,15 @@ def _export2csv(data, nb_landmark, outdir=None, feature_names=None, modif=""):
     # Export the header and the data
     # newline='' is use to fix #11. On Windows the csv package add an extra '\r' that is not
     # observed on Unix systems.
-    with open(output_filename, "w", newline='') as out_file:
+    # Additionally, this fix only works on python 3 as python 2 open's does not support the
+    # `newline` argument.
+    if sys.version_info[0] == 2:
+        access = 'wb'
+        kwargs = {}
+    else:
+        access = 'wt'
+        kwargs = {'newline':''}
+    with open(output_filename, access, **kwargs) as out_file:
         csv.DictWriter(out_file, fieldnames=fieldnames).writeheader()
         csv.writer(out_file).writerows(data)
     print("File successfully generated: " + output_filename)
