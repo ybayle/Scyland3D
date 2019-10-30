@@ -214,7 +214,7 @@ def pts2csv(
     order=None,
     order_factor=None,
     feature_names=None,
-    verbose=True,
+    verbose=False,
 ):
     """pts2csv
     Convert .pts files from indir to a single .csv file
