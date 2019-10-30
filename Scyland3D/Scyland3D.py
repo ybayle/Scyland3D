@@ -245,6 +245,7 @@ def pts2csv(
     list_pts_files = _list_pts(indir)
     data2write = []
     order_factor_found_at_least_in_one_file = False
+    mirror_applied_at_least_in_one_file = False
     # For each .pts file
     for index, filen in enumerate(list_pts_files):
         if verbose:
@@ -285,7 +286,6 @@ def pts2csv(
             + " landmarks detected instead of "
             + str(nb_landmark)
         )
-        modif = ""
         # Apply a z-axis mirror to the landmarks to study left-right differences in the given species
         if (
             mirror_factor is not None
@@ -293,7 +293,7 @@ def pts2csv(
             and mirror_factor in filen
         ):
             data = _reverse_z(data)
-            modif += "_reversed"
+            mirror_applied_at_least_in_one_file = True
         # Reorder the landmarks as specified by the order argument only for the files containing the
         # order_factor string.
         if order_factor is not None and order_factor in filen:
@@ -303,7 +303,6 @@ def pts2csv(
             data = np.array(data)
             data = data[order]
             data = data.tolist()
-            modif += "_reordered"
         # Add a new row to the data
         # This first column contains an unique ID for each sample that corresponds to the file path
         # and name.
@@ -329,6 +328,17 @@ def pts2csv(
             + order_factor
             + ") provided has not been found in any file names."
         )
+    if mirror_factor is not None:
+        assert mirror_applied_at_least_in_one_file, (
+            "The mirror_factor ("
+            + mirror_factor
+            + ") provided has not been found in any file names."
+        )
+    modif = ""
+    if order_factor_found_at_least_in_one_file:
+        modif += "_reordered"
+    if mirror_applied_at_least_in_one_file:
+        modif += "_reversed"
     _export2csv(
         outdir=outdir,
         data=data2write,

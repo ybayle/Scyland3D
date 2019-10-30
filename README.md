@@ -77,7 +77,7 @@ The function `pts2csv()` is the core of **Scyland3D** and is also called when us
     - A string containing the keyword for items to be mirrored in the 3D space.
     - Default: None
     - Example: `Scyland3D.pts2csv(indir="path/", mirror_factor="upper")`
-    - Command line: `python -m Scyland3D.Scyland3D -i "path/" -m "upper"` will mirror in 3D the files containing the keyword `upper` before processing them with the remaining `lower` items as depicted in the figure below:
+    - Command line: `python -m Scyland3D.Scyland3D -i "path/" -m "upper"` will mirror in 3D the files containing the keyword `upper` before processing them with the `lower` items as depicted in the figure above.
 
 ## How To Contribute
 
