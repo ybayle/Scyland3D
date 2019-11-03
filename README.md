@@ -59,7 +59,7 @@ The function `pts2csv()` is the core of **Scyland3D** and is also called when us
     - Example: `Scyland3D.pts2csv(indir="path/", order_factor="upper", order=[36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37])`
     - Command line: `python -m Scyland3D.Scyland3D -i "path/" -f "upper" -r "36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37"`
 - *order_factor* (optional)
-    - A string containing the keyword for items that need their landmarks and semilandmarks to be reordered. The order argument must also be supplied.
+    - A string containing the keyword for items that need their landmarks and semilandmarks to be reordered. The order argument must also be supplied. **Warning:** no checks are made on the factor, so be sure to avoid any typo.
     - Default: None
     - Example: if the dataset contains lower and upper teeth where only the upper teeth need to be reordered, one can use: `Scyland3D.pts2csv(indir="path/", order_factor="upper", order=[36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37])`
     - Command line: `python -m Scyland3D.Scyland3D -i "path/" -f "upper" -r "36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0, 37"`. This is only valid if the keyword `upper` is present in the file name.
@@ -74,10 +74,10 @@ The function `pts2csv()` is the core of **Scyland3D** and is also called when us
     - Example: `Scyland3D.pts2csv(indir="path/", verbose=True)` displays information to the console.
     - Command line: `python -m Scyland3D.Scyland3D -i "path/" -v` displays information to the console.
 - *mirror_factor* (optional)
-    - A string containing the keyword for items to be mirrored in the 3D space.
+    - A string containing the keyword for items to be mirrored in the 3D space. **Warning:** no checks are made on the factor, so be sure to avoid any typo.
     - Default: None
     - Example: `Scyland3D.pts2csv(indir="path/", mirror_factor="upper")`
-    - Command line: `python -m Scyland3D.Scyland3D -i "path/" -m "upper"` will mirror in 3D the files containing the keyword `upper` before processing them with the `lower` items as depicted in the figure above.
+    - Command line: `python -m Scyland3D.Scyland3D -i "path/" -m "upper"` will mirror in 3D -as depicted in the figure above- the landmarks stored in `.pts` file with the keyword `upper` in their filename. Then, it will export to a `.csv` file those processed landmarks and also the unprocessed landmarks from  `.pts` file that do not contain the keyword `upper` in their filename.
 
 ## How To Contribute
 
