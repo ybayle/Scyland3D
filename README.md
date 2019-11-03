@@ -77,7 +77,7 @@ The function `pts2csv()` is the core of **Scyland3D** and is also called when us
     - A string containing the keyword for items to be mirrored in the 3D space. **Warning:** no checks are made on the factor, so be sure to avoid any typo.
     - Default: None
     - Example: `Scyland3D.pts2csv(indir="path/", mirror_factor="upper")`
-    - Command line: `python -m Scyland3D.Scyland3D -i "path/" -m "upper"` will mirror in 3D -as depicted in the figure above- the landmarks stored in `.pts` file with the keyword `upper` in their filename. Then, it will export to a `.csv` file those processed landmarks and also the unprocessed landmarks from  `.pts` file that do not contain the keyword `upper` in their filename.
+    - Command line: `python -m Scyland3D.Scyland3D -i "path/" -m "upper"` will mirror in 3D the landmarks stored in `.pts` files with the keyword upper in their filename. Then, it will export to a `.csv` file those mirrored landmarks and also the unprocessed landmarks from `.pts` files that do not contain the keyword `upper` in their filename. The figure above depicts the mirroring.
 
 ## How To Contribute
 
