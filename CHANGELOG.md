@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.19 2019-11-03
+
+Fix #12 about invalid parameters when using the command line.
+Fix #13 about incomplete readme details.
+Improve the documentation.
+
 ## 1.0.18 2019-10-20
 
 Add details in ReadMe about the context of the included image #5

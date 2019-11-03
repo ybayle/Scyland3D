@@ -88,5 +88,6 @@ We provide an example use-case with a subset of our dataset in our Github reposi
 # Acknowledgements
 
 We acknowledge the contribution of SFR Biosciences (UMS3444/CNRS, US8/Inserm, ENS de Lyon, UCBL) facilities: AniRA-ImmOs and Mathilde Bouchet for her help with X-ray microtomography.
+We are thankful to Patrik Huber and Richard Barnes, the two reviewers that helped improved a lot the code and the documentation.
 
 # References

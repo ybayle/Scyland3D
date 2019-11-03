@@ -103,4 +103,5 @@ Please refer to the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## Acknowledgements
 
-We acknowledge the contribution of SFR Biosciences (UMS3444/CNRS, US8/Inserm, ENS de Lyon, UCBL) facilities: AniRA-ImmOs and Mathilde Bouchet for her help with X-ray microtomography.
+- We acknowledge the contribution of SFR Biosciences (UMS3444/CNRS, US8/Inserm, ENS de Lyon, UCBL) facilities: AniRA-ImmOs and Mathilde Bouchet for her help with X-ray microtomography.
+- We are thankful to @patrikhuber and @r-barnes, the two reviewers from [JOSS](https://github.com/openjournals/joss-reviews) that helped improved a lot the code and the documentation.
