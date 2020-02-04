@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.20 2020-02-04
+
+Fix typos in article and generate doi
+
 ## 1.0.19 2019-11-03
 
 Fix #12 about invalid parameters when using the command line.
