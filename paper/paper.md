@@ -25,10 +25,10 @@ bibliography: paper.bib
 
 # Abstract
 
-``Scyland3D`` is a Python tool for converting 3D raw landmark and semilandmark coordinates exported from landmark acquisition software to a csv format best suited for geometric morphometric analyses.
+``Scyland3D`` is a Python tool for converting 3D raw landmark and semilandmark coordinates exported from landmark acquisition software to a CSV best suited for geometric morphometric analyses.
 Processing schemes to mirror and reorder these points are provided to address further symmetry issues.
 This is useful when working on left-right differences in a given species. 
-This tool is designed to pre-process the raw extracted landmarks and to generate a database-like CSV file for statistical analyses.
+This tool is designed to pre-process the raw extracted landmarks and to generate a database-like CSV for statistical analyses.
 The main targeted audience are biologists looking for an easy and quick parser for raw landmarks.
 
 # Background
@@ -42,7 +42,7 @@ Landmark-based geometric morphometrics in 2D allows separating a form into size 
 In this method, landmarks define comparable points within a set of objects and capture their geometry.
 A Procrustes superimposition then rescales, rotates and translates these landmarks to virtually superimpose all object geometries [@Zelditch2004; @Adams2013]. 
 Each measured variable, however, is partly independent of other ones on the same structure as all may have been quantified in different 2D views of the same object.
-Then, merging morphometric datasets for global analyses may bring noises in the results.
+Then, merging morphometric datasets for global analyses may bring noise in the results.
 
 Landmark-based geometric morphometrics in 3D emerged with recent imaging techniques among other X-ray microtomography [@Adams2013]. 
 3D surfaces are created based on scanned organisms and landmarks can be set on all views of interest of a given specimen and belong to the same dataset, with the same reference space.   
@@ -55,7 +55,7 @@ Moreover, the rise of intra- and interspecific asymmetry questions involves post
 
 ``Scyland3D`` can be installed from pip https://pypi.org/project/Scyland3D or from the Github repository https://github.com/ybayle/Scyland3D.
 
-We introduce ``Scyland3D`` to convert .pts files (format defined on page 37 in http://www.idav.ucdavis.edu/research/projects/EvoMorph/supplement/LandmarkDoc_v3_b6.pdf), exported by the Landmark software (v3.6 cf http://www.idav.ucdavis.edu/research/projects/EvoMorph/supplement/LandmarkDoc_v3_b6.pdf) or any landmark processing software, into .csv files.
+We introduce ``Scyland3D`` to convert .pts files (format defined on page 37 in https://web.cs.ucdavis.edu/~amenta/LandmarkDoc_v3_b6.pdf), exported by the Landmark software (v3.6 cf https://web.cs.ucdavis.edu/~amenta/LandmarkDoc_v3_b6.pdf) or any landmark processing software, into CSV.
 ``Scyland3D`` first removes duplicated coordinates because landmarks and semilandmarks may coincide in the Landmark software.
 We then allow to mirror the landmark and semilandmark coordinates for a subset of 3D objects and to reorder these points.
 This allows performing 3D geometric morphometric analyses between previously asymmetrical objects (Figure 1).
@@ -68,7 +68,7 @@ Before processing the data, ``Scyland3D`` checks their integrity because setting
 
 - Consistency of folder and file names (one folder per specimen with an underscore between features in the folder and file's name),
 - Number of landmarks and semilandmarks across all structures,
-- Presence of duplicates landmark and semilandmark coordinates exported by the Landmark software.
+- Presence of duplicate landmarks and semilandmark coordinates exported by the Landmark software.
 
 Processing options can be specified in order to modify the dataset asymmetry.
 In this case, landmark and semilandmark coordinates of elements characterised by a given feature can be sequentially mirrored and reordered.
@@ -88,6 +88,6 @@ We provide an example use-case with a subset of our dataset in our Github reposi
 # Acknowledgements
 
 We acknowledge the contribution of SFR Biosciences (UMS3444/CNRS, US8/Inserm, ENS de Lyon, UCBL) facilities: AniRA-ImmOs and Mathilde Bouchet for her help with X-ray microtomography.
-We are thankful to Patrik Huber and Richard Barnes, the two reviewers that helped improved a lot the code and the documentation.
+We are thankful to Patrik Huber and Richard Barnes, the two reviewers who helped improve the code and the documentation a lot.
 
 # References
