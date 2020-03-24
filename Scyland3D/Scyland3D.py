@@ -119,19 +119,12 @@ def _remove_duplicates(data):
     for item in data:
         coord.append([float(xyz) for xyz in item.split(",")])
     index_to_remove = []
-    # Check which landmarks have similar coordinates
-    for k in range(3):
-        for i in range(len(coord) - 1):
-            for j in range(len(coord) - i - 1):
-                if coord[i][k] == coord[i + j + 1][k]:
-                    # If two landmarks share at least two similar coordinates, then the rows are
-                    # considered as duplicates and the second one will be removed.
-                    tmp = [0, 1, 2]
-                    tmp.remove(k)
-                    if (coord[i][tmp[0]] == coord[i + j + 1][tmp[0]]) or (
-                        coord[i][tmp[1]] == coord[i + j + 1][tmp[1]]
-                    ):
-                        index_to_remove.append(i + j + 1)
+    # Check which landmarks have similar coordinates up to epsilon
+    epsilon = 1e-6 # needs to be between 4e-5 and 4e-7
+    for i in range(len(coord) - 1):
+        for j in range(len(coord) - i - 1):
+            if (abs(coord[i][0] - coord[i + j + 1][0]) < (epsilon * coord[i][0]) and abs(coord[i][1] - coord[i + j + 1][1]) < (epsilon * coord[i][1]) and abs(coord[i][2] - coord[i + j + 1][2]) < (epsilon * coord[i][2])):
+                index_to_remove.append(i + j + 1)
     # Return only landmarks that have not been detected as duplicates 
     new_data = []
     for i, item in enumerate(coord):
