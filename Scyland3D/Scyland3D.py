@@ -111,6 +111,7 @@ def _remove_duplicates(data):
     Returns:
         An array of landmarks where duplicates were removed.
     """
+    data = data[7:]
     # Remove easy duplicates in the coordinates where the string are an exact match
     data = sorted(set(data), key=data.index)
     # Remove the other duplicates because some landmarks and semilandmarks are sometimes exported twice.
