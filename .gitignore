@@ -3,9 +3,12 @@ __pycache__
 Scyland3D.egg-info/
 dist/
 build/
+*.pytest_cache
 
 # Scyland3D
 landmarks.csv
 landmarks_reversed.csv
 landmarks_reordered.csv
 landmarks_reversed_reordered.csv
+
+.vscode

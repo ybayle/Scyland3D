@@ -3,7 +3,7 @@ from io import open
 
 setup(
     name = 'Scyland3D',
-    version = '1.1.0',
+    version = '1.2.0',
     description = 'A Python package for processing 3D landmarks',
     long_description=open('README.md', 'r').read(),
     long_description_content_type="text/markdown",

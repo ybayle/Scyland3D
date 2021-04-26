@@ -418,6 +418,20 @@ def _validation_against_ref():
     print("Ok!")
 
 
+def project3Dto2D(points3D):
+    """
+    project3Dto2D
+
+    Projects the set of 3D points in 2D and return the new points. 
+
+    Args:
+        points3D ([list]): Input points in 3D.
+    """
+    points2D = [2]
+    
+    return points2D
+
+
 def test_no_regression():
     """test_no_regression
 

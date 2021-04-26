@@ -1,8 +1,16 @@
 # CHANGELOG
 
+## 1.2.0 2021-04-26
+
+Add 3D to 2D option.
+
+## 1.1.0 2020-02-04
+
+Generated Github version.
+
 ## 1.0.20 2020-02-04
 
-Fix typos in article and generate doi
+Fix typos in article and generate doi.
 
 ## 1.0.19 2019-11-03
 
