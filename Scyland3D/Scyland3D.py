@@ -171,6 +171,8 @@ def _reverse_z(data):
     # Compute the inversion coefficients for the mirroring
     C = -1.0
     D = -fit[2]
+    # C = 0
+    # D = 0
     data_mirror = []
     for xyz in data:
         x = xyz[0]
@@ -181,9 +183,30 @@ def _reverse_z(data):
         t = float((D - A * x - B * y - C * z) / (A * A + B * B + C * C))
         # Compute the resulting value for the mirrored points where the new coordinate is equal to
         # twice the distance between the old coordinate and the symmetry point.
-        xp = float(x + 2.0 * A * t)
-        yp = float(y + 2.0 * B * t)
-        zp = float(z + 2.0 * C * t)
+        xp = float(x + A * t)
+        yp = float(y + B * t)
+        zp = float(z + C * t)
+        # xp = float(x + 2.0 * A * t)
+        # yp = float(y + 2.0 * B * t)
+        # zp = float(z + 2.0 * C * t)
+
+        # https://stackoverflow.com/questions/23472048/projecting-3d-points-to-2d-plane ?
+        # n = np.array([A, B, C])
+        # x_axis = np.array([1, 0, 0])
+        # x_axis = x_axis - np.dot(x_axis, n) * n
+        # newValue = np.sqrt((x_axis**2).sum())
+        # print(newValue)
+        # print(x_axis)
+        # print(x_axis / newValue)
+        # x_axis = x_axis / newValue
+        # # x_axis /= np.sqrt((x_axis**2).sum())
+        # y_axis = np.cross(n, x_axis)
+        # myPoint = np.array(xp, yp, zp)
+        # xp = np.dot(myPoint, x_axis)
+        # yp = np.dot(myPoint, y_axis)
+        # zp = 0
+
+
         data_mirror.append([xp, yp, zp])
     return data_mirror
 
